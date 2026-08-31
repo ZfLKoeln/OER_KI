@@ -3,689 +3,550 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kriterienkatalog OER &amp; KI-gestütztes BNE-Material — interaktive Checkliste</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
-<!-- Radar chart is rendered as inline SVG below, no external charting library required -->
-
+<title>Kriterienkatalog: OER- und KI-gestütztes Material zu BNE</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
   :root{
-    --ink:#0f2438;
-    --ink-soft:#516675;
-    --paper:#f6f7f8;
-    --panel:#ffffff;
-    --line:#e0e4e7;
-
-    --A-main:#005176; --A-tint:#e4eef3; --A-dark:#00374f;
-    --B-main:#009dcc; --B-tint:#e1f5fb; --B-dark:#0a6f8f;
-    --C-main:#fbbb33; --C-tint:#fff6e0; --C-dark:#8a5f12;
-    --D-main:#dc587f; --D-tint:#fbe8ee; --D-dark:#9c2f52;
-
-    --radius:14px;
+    --blue:#3498db; --blue-dark:#2980b9; --ink:#2c3e50; --bg:#f8f9fa;
+    --line:#e2e6ea; --green:#27ae60; --amber:#f39c12; --red:#e74c3c; --muted:#7f8c8d;
   }
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    background:var(--paper);
-    color:var(--ink);
-    font-family:'IBM Plex Sans', system-ui, sans-serif;
-    line-height:1.5;
-    -webkit-font-smoothing:antialiased;
-  }
-  .wrap{max-width:960px;margin:0 auto;padding:0 24px 84px;}
+  body{font-family:'Segoe UI',Arial,sans-serif;margin:0;background:var(--bg);color:#333;line-height:1.5;}
+  .container{max-width:980px;margin:0 auto;background:#fff;padding:36px 40px;box-shadow:0 2px 14px rgba(0,0,0,.08);}
+  h1{color:var(--ink);font-size:1.6em;margin-bottom:6px;}
+  h2{color:var(--ink);border-bottom:3px solid var(--blue);padding-bottom:6px;margin-top:44px;}
+  h3{color:var(--blue-dark);margin-bottom:2px;}
+  .intro{background:#eef6fc;border-left:4px solid var(--blue);padding:14px 18px;border-radius:4px;font-size:.95em;color:#34495e;}
+  .subsection{margin:18px 0 30px 0;padding:16px 20px;border:1px solid var(--line);border-radius:8px;background:#fdfdfd;transition:opacity .2s;}
+  .subsection.excluded{opacity:.42;}
+  .subsection-header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px dashed var(--line);padding-bottom:8px;margin-bottom:10px;}
+  .subsection-header h3{margin:0;}
+  .toggle-label{font-size:.82em;color:var(--muted);display:flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap;user-select:none;}
+  .toggle-label input{transform:scale(1.15);}
+  .subsection-intro{font-size:.87em;color:#5d6d7e;font-style:italic;margin:0 0 12px 0;}
+  .criterion{margin:10px 0;display:flex;align-items:flex-start;gap:10px;}
+  .criterion input{margin-top:4px;flex-shrink:0;transform:scale(1.2);cursor:pointer;}
+  .criterion label{cursor:pointer;font-size:.95em;}
+  .criterion b{color:var(--ink);}
+  .criterion small{display:block;color:#5d6d7e;font-weight:normal;}
+  .note-box{background:#fff8e1;border-left:4px solid #f39c12;padding:12px 16px;border-radius:4px;font-size:.9em;margin:20px 0;}
+  .variant-group{border:1px dashed #b7d4e8;border-radius:8px;padding:4px 4px 14px 4px;margin:18px 0 30px 0;background:#f6fbfe;}
+  .variant-group>.variant-hint{font-size:.85em;color:var(--blue-dark);padding:10px 16px 0 16px;}
+  .variant-group .subsection{border:1px solid var(--line);background:#fff;}
+  .variant-header{flex-direction:column;align-items:flex-start;gap:8px;}
+  .variant-header .toggle-label{font-size:.88em;}
 
-  header.top{
-    padding:52px 24px 28px; max-width:960px; margin:0 auto;
-    border-bottom:1px solid var(--line);
-  }
-  .eyebrow{
-    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:.14em;
-    text-transform:uppercase; color:var(--ink-soft); margin:0 0 10px;
-  }
-  h1{
-    font-family:'Fraunces', serif; font-weight:600; font-size:clamp(27px,4vw,37px);
-    line-height:1.14; margin:0 0 12px; color:var(--ink); letter-spacing:-.01em;
-  }
-  .lede{color:var(--ink-soft); font-size:15.5px; max-width:62ch; margin:0 0 24px;}
+  /* ===== Ergebnisübersicht ===== */
+  .results-panel{background:#f6f9fb;border:1px solid var(--line);border-radius:10px;padding:24px 28px;margin-top:18px;}
+  .results-grid{display:flex;flex-wrap:wrap;gap:30px;align-items:flex-start;}
+  #chart-container{flex:2 1 520px;max-width:680px;margin:0 auto;}
+  #chart-empty{text-align:center;color:var(--muted);font-style:italic;padding:30px;}
+  .results-summary{flex:1 1 260px;min-width:240px;}
+  .counter{font-size:1.5em;font-weight:bold;color:var(--ink);margin-bottom:4px;}
+  .counter span{color:var(--blue-dark);}
+  .counter-label{font-size:.85em;color:var(--muted);margin-bottom:20px;}
+  .recommendation-box{border-radius:8px;padding:16px 18px;font-size:1.05em;font-weight:600;text-align:center;transition:background .2s,color .2s;background:#eceff1;color:var(--muted);}
+  .recommendation-box.rec-empfohlen{background:#e8f8ee;color:var(--green);border:1px solid #b7e4c7;}
+  .recommendation-box.rec-anpassung{background:#fef6e0;color:#a9720f;border:1px solid #f5dc9c;}
+  .recommendation-box.rec-nicht{background:#fdecea;color:#c0392b;border:1px solid #f3c2bd;}
+  .recommendation-sub{font-size:.82em;font-weight:normal;margin-top:6px;color:#6a5216;}
+  .note-a1b3{font-size:.85em;color:var(--muted);margin-top:14px;}
+  .basis-line{font-size:.78em;color:var(--muted);margin-top:20px;padding-top:14px;border-top:1px solid var(--line);}
+  .explain-link{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--blue);color:var(--blue-dark);font-size:.82em;padding:6px 12px;border-radius:20px;cursor:pointer;margin-top:12px;text-decoration:none;}
+  .explain-link:hover{background:#eef6fc;}
 
-  .progress-bar-shell{
-    position:sticky; top:0; z-index:40;
-    background:rgba(246,247,248,.94); backdrop-filter:blur(6px);
-    border-bottom:1px solid var(--line);
-  }
-  .progress-inner{max-width:960px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:16px;}
-  .progress-track{flex:1;height:8px;border-radius:99px;background:#e4e8ea;overflow:hidden;}
-  .progress-fill{
-    height:100%;border-radius:99px;width:0%;transition:width .35s ease;
-    background:linear-gradient(90deg,var(--A-main),var(--B-main),var(--C-main),var(--D-main));
-  }
-  .progress-label{font-family:'IBM Plex Mono', monospace;font-size:12.5px;color:var(--ink-soft);white-space:nowrap;}
-  .progress-actions{display:flex;gap:8px;}
-  .btn-ghost{
-    font-family:'IBM Plex Sans';font-size:12.5px;font-weight:600;color:var(--ink);
-    background:transparent;border:1px solid var(--line);border-radius:8px;padding:6px 10px;cursor:pointer;
-  }
-  .btn-ghost:hover{border-color:#aab4bb;background:#eef0f2;}
-
-  nav.jump{display:flex;flex-wrap:wrap;gap:8px;margin:26px 0 6px;}
-  nav.jump a{
-    font-family:'IBM Plex Mono', monospace;font-size:11.5px;letter-spacing:.03em;
-    color:var(--ink-soft);text-decoration:none;border:1px solid var(--line);border-radius:99px;
-    padding:6px 12px 6px 8px;background:var(--panel);display:inline-flex;align-items:center;gap:7px;
-  }
-  nav.jump a:hover{border-color:#aab4bb;color:var(--ink);}
-  nav.jump .dot{width:8px;height:8px;border-radius:50%;}
-
-  /* Main category block */
-  section.maincat{margin-top:46px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);}
-  .maincat-head{
-    display:flex;align-items:center;justify-content:space-between;gap:16px;
-    padding:18px 22px;color:#fff;
-  }
-  .maincat-head h2{
-    font-family:'Fraunces', serif;font-weight:600;font-size:21px;margin:0;letter-spacing:-.01em;
-  }
-  .maincat-id{
-    font-family:'IBM Plex Mono', monospace;font-size:12px;opacity:.85;display:block;margin-bottom:2px;
-  }
-  .maincat-badge{
-    font-family:'IBM Plex Mono', monospace;font-size:12px;font-weight:600;
-    padding:7px 13px;border-radius:99px;white-space:nowrap;
-    background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.5);
-    display:flex; align-items:center; gap:8px;
-  }
-  .maincat-badge .ring{
-    width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.55);
-  }
-  .maincat-badge.done .ring{background:#fff; box-shadow:0 0 0 2px rgba(255,255,255,.5);}
-  .maincat-body{background:var(--panel);padding:6px 22px 20px;}
-
-  /* Subcategory */
-  .subcat{margin-top:18px;border-radius:10px;overflow:hidden;border:1px solid var(--line);}
-  .subcat.standalone{margin-top:10px;box-shadow:0 6px 18px -12px rgba(15,36,56,.35);}
-  .standalone-divider{
-    margin-top:34px;margin-bottom:2px;
-    display:flex;align-items:center;gap:10px;
-    font-family:'IBM Plex Mono', monospace;font-size:11px;letter-spacing:.06em;
-    text-transform:uppercase;color:var(--ink-soft);
-  }
-  .standalone-divider::before, .standalone-divider::after{
-    content:"";flex:1;height:1px;background:var(--line);
-  }
-  .subcat-head{
-    display:flex;align-items:center;justify-content:space-between;gap:14px;
-    padding:12px 16px;border-left:4px solid transparent;
-  }
-  .subcat-title{display:flex;align-items:baseline;gap:10px;}
-  .subcat-id{font-family:'IBM Plex Mono', monospace;font-size:12px;font-weight:600;}
-  .subcat-name{font-family:'Fraunces', serif;font-weight:600;font-size:16.5px;}
-  .subcat-count{font-family:'IBM Plex Mono', monospace;font-size:12px;white-space:nowrap;}
-  .subcat-track{height:5px;background:#fff;}
-  .subcat-fill{height:100%;width:0%;transition:width .3s ease;}
-  .subcat-note{
-    font-size:12.5px; padding:8px 16px 0; font-style:italic; color:var(--ink-soft);
-  }
-
-  .items{display:flex;flex-direction:column;}
-  .item{
-    display:flex;gap:12px;align-items:flex-start;padding:11px 16px;
-    border-top:1px solid var(--line); cursor:pointer; background:#fff;
-  }
-  .item:hover{background:#fafbfc;}
-  .item input[type=checkbox]{
-    appearance:none;-webkit-appearance:none;width:19px;height:19px;min-width:19px;margin-top:2px;
-    border:1.6px solid #b7c1c8;border-radius:5px;background:#fff;display:grid;place-content:center;cursor:pointer;
-  }
-  .item input[type=checkbox]::before{
-    content:"";width:10px;height:10px;transform:scale(0);
-    clip-path:polygon(14% 44%,0 65%,50% 100%,100% 16%,80% 0%,45% 62%);
-    background:#fff; transition:transform .12s ease;
-  }
-  .item input[type=checkbox]:checked::before{transform:scale(1);}
-  .item label{font-size:14.5px;color:var(--ink);cursor:pointer;}
-  .item.checked label{color:var(--ink-soft);}
-
-  .block-group{padding:10px 16px 14px;background:#fff;}
-  .block{margin-top:10px;border:1px dashed var(--line);border-radius:9px;overflow:hidden;}
-  .block-head{
-    display:flex;justify-content:space-between;align-items:center;padding:9px 14px;
-    font-family:'IBM Plex Mono', monospace;font-size:12px;font-weight:600;
-  }
-  .block .items .item{padding-left:16px;}
-  .block-track{height:4px;background:#fff;}
-  .block-fill{height:100%;width:0%;transition:width .3s ease;}
-
-  /* Results */
-  section.results{
-    margin-top:64px;padding:36px 28px 34px;background:var(--panel);
-    border:1px solid var(--line);border-radius:var(--radius);
-    box-shadow:0 1px 0 rgba(15,36,56,.02), 0 18px 40px -28px rgba(15,36,56,.35);
-  }
-  .results-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;margin-bottom:6px;}
-  .results-head h2{font-family:'Fraunces', serif;font-weight:600;font-size:24px;color:var(--ink);margin:0 0 6px;}
-  .results-head p{margin:0;color:var(--ink-soft);font-size:14px;max-width:48ch;}
-
-  .verdict{
-    font-family:'IBM Plex Mono', monospace;font-size:12px;font-weight:600;letter-spacing:.03em;
-    padding:8px 14px;border-radius:99px;white-space:nowrap;
-  }
-  .verdict.low{background:#fbe4e9;color:#9c2f52;}
-  .verdict.mid{background:#fff2d6;color:#8a5f12;}
-  .verdict.high{background:#e1f2e6;color:#1f6b3a;}
-
-  .spider-layout{display:grid;grid-template-columns:1.05fr .95fr;gap:28px;align-items:center;margin-top:22px;}
-  @media (max-width:760px){.spider-layout{grid-template-columns:1fr;}}
-  .chart-shell{position:relative;background:#fbfcfc;border:1px solid var(--line);border-radius:12px;padding:14px;}
-
-  .legend-list{display:flex;flex-direction:column;gap:14px;}
-  .legend-row{display:grid;grid-template-columns:14px 1fr auto;align-items:center;gap:10px;font-size:13.5px;}
-  .legend-swatch{width:12px;height:12px;border-radius:4px;}
-  .legend-name{font-weight:600;}
-  .legend-pct{font-family:'IBM Plex Mono', monospace;font-size:12.5px;color:var(--ink-soft);min-width:38px;text-align:right;}
-  .legend-track{grid-column:1 / -1;height:6px;border-radius:99px;background:#e6eaec;overflow:hidden;margin-top:-6px;}
-  .legend-fill{height:100%;width:0%;}
-  .legend-subs{grid-column:2 / -1;display:flex;gap:6px;flex-wrap:wrap;margin-top:2px;}
-  .legend-sub-chip{
-    font-family:'IBM Plex Mono', monospace;font-size:10.5px;padding:2px 7px;border-radius:99px;
-    color:var(--ink-soft); border:1px solid var(--line);
-  }
-
-  .rec-box{margin-top:24px;padding:16px 18px;border-radius:10px;border:1px dashed var(--line);font-size:14px;color:var(--ink-soft);}
-  .rec-box b{color:var(--ink);}
-
-  footer.credit{max-width:960px;margin:40px auto 0;padding:0 24px;font-size:12px;color:#8b979c;}
+  /* ===== Modal ===== */
+  .modal-overlay{position:fixed;inset:0;background:rgba(44,62,80,.55);display:none;align-items:center;justify-content:center;z-index:100;padding:20px;}
+  .modal-overlay.open{display:flex;}
+  .modal-box{background:#fff;max-width:600px;width:100%;max-height:85vh;overflow-y:auto;border-radius:10px;padding:28px 32px;position:relative;box-shadow:0 10px 40px rgba(0,0,0,.25);}
+  .modal-box h3{margin-top:0;color:var(--ink);}
+  .modal-close{position:absolute;top:10px;right:14px;background:none;border:none;font-size:1.5em;line-height:1;cursor:pointer;color:var(--muted);}
+  .modal-close:hover{color:var(--ink);}
+  .modal-box table{width:100%;border-collapse:collapse;font-size:.88em;margin:14px 0;}
+  .modal-box th,.modal-box td{border:1px solid var(--line);padding:6px 8px;text-align:left;}
+  .modal-box th{background:#f1f5f8;}
+  .modal-box code{background:#f1f5f8;padding:1px 5px;border-radius:4px;font-size:.9em;}
+  .anhang-section h3{margin-top:26px;}
+  .anhang-section table{width:100%;border-collapse:collapse;font-size:.9em;margin:14px 0;}
+  .anhang-section th,.anhang-section td{border:1px solid var(--line);padding:7px 10px;text-align:left;}
+  .anhang-section th{background:#f1f5f8;}
+  .reset-bar{position:sticky;top:0;background:#fff;padding:10px 0;margin-bottom:10px;text-align:right;border-bottom:1px solid var(--line);z-index:5;}
+  .reset-bar button{background:var(--blue);color:#fff;border:none;padding:8px 16px;border-radius:5px;cursor:pointer;font-size:.85em;margin-left:8px;}
+  .reset-bar button:hover{background:var(--blue-dark);}
+  .page-break{page-break-before:always;margin-top:60px;border-top:2px dashed #ccc;padding-top:30px;}
   @media print{
-    .progress-bar-shell, nav.jump, .btn-ghost{display:none;}
-    section.results{break-inside:avoid;}
+    .no-print{display:none;}
+    .reset-bar{display:none;}
+    .page-break{page-break-before:always;border-top:none;}
+    .subsection.excluded{opacity:1;}
   }
 </style>
 </head>
 <body>
+<div class="container">
 
-<div class="progress-bar-shell">
-  <div class="progress-inner">
-    <span class="progress-label" id="progressLabel">0 / 0 Kriterien</span>
-    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-    <div class="progress-actions">
-      <button class="btn-ghost" onclick="window.print()">Drucken / PDF</button>
-      <button class="btn-ghost" onclick="resetAll()">Zurücksetzen</button>
+  <div class="reset-bar no-print">
+    <button id="printBtn" type="button">Drucken / PDF</button>
+    <button id="resetBtn" type="button">Zurücksetzen</button>
+  </div>
+
+  <h1>Kriterienkatalog: Bewertung von OER- und KI-gestütztem Material zu BNE</h1>
+  <div class="intro">
+    Checkliste zur systematischen Bewertung von Bildungsmaterial zur Bildung für nachhaltige Entwicklung (BNE), das als
+    Open Educational Resource (OER) veröffentlicht und/oder mit KI erstellt wurde. Die Kriterien dienen als Bewertungs-
+    und Orientierungshilfe. <strong>Es müssen nicht alle Kriterien erfüllt sein.</strong> Kreuzen Sie die zutreffenden
+    Kriterien an — die Analysespinne am Ende aktualisiert sich automatisch. Nicht jeder Bereich ist für jedes Material
+    relevant: Mit dem Häkchen „Bereich einbeziehen" im Kopf jedes Abschnitts können Sie einzelne Unterkategorien
+    (A1, B3 etc.) gezielt aus der Bewertung und der Analysespinne herausnehmen.
+  </div>
+
+  <form id="evalForm">
+
+    <!-- ============ A. Pädagogisch-didaktische Dimension ============ -->
+    <h2>A. Pädagogisch-didaktische Dimension</h2>
+
+    <div class="subsection" data-section="A1">
+      <div class="subsection-header">
+        <h3>A1. Inhaltliche Dimension</h3>
+        <label class="toggle-label"><input type="checkbox" class="section-toggle" data-section-toggle="A1" data-group="A" checked> Bereich einbeziehen</label>
+      </div>
+      <div class="criterion"><input type="checkbox" data-cat="A1" id="c1"><label for="c1"><b>Zielgruppenorientierung und Anwendungsbereich:</b> <small>Zielgruppe (Alter, Vorwissen, Kontext) und Einsatzbereich (Fach, Schulform, Setting) sind klar definiert und das Material ist darauf abgestimmt.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="A1" id="c2"><label for="c2"><b>Fachliche Richtigkeit und Fundierung:</b> <small>Inhalte sind fachlich korrekt, aktuell und durch Quellen bzw. Fachpersonen belegt; bei KI-generierten Inhalten ist eine fachliche Prüfung erfolgt (siehe PRÜFE-Check, Abschnitt C3).</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="A1" id="c3"><label for="c3"><b>Vollständigkeit und Kohärenz:</b> <small>Das Thema wird in sich schlüssig und ohne inhaltliche Lücken oder Brüche behandelt.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="A1" id="c4"><label for="c4"><b>Inhaltliche Verwendbarkeit:</b> <small>Inhalte sind so aufbereitet, dass sie direkt oder mit geringem Aufwand im Unterricht/in der Bildungsarbeit nutzbar sind.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="A1" id="c5"><label for="c5"><b>Lehrplan- und Bildungsstandards:</b> <small>Es besteht ein erkennbarer Bezug zu curricularen Vorgaben und Bildungsstandards (z. B. BNE-Orientierungsrahmen, KMK-Vorgaben).</small></label></div>
     </div>
+
+    <div class="subsection" data-section="A2">
+      <div class="subsection-header">
+        <h3>A2. Didaktische Dimension</h3>
+        <label class="toggle-label"><input type="checkbox" class="section-toggle" data-section-toggle="A2" data-group="A" checked> Bereich einbeziehen</label>
+      </div>
+      <div class="criterion"><input type="checkbox" data-cat="A2" id="c6"><label for="c6"><b>Motivation/Vielfalt der Lernzugänge:</b> <small>Unterschiedliche Zugänge (visuell, handelnd, diskursiv, forschend) werden angesprochen.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="A2" id="c7"><label for="c7"><b>Anwendung und Transfer:</b> <small>Es besteht die Möglichkeit zur Übertragung auf eigene Praxis bzw. reale Situationen.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="A2" id="c8"><label for="c8"><b>Differenzierung und Support:</b> <small>Angebote in unterschiedlichen Niveaustufen, Erklärhilfen und Unterstützungsangebote sind vorhanden.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="A2" id="c9"><label for="c9"><b>Kollaboration und Interaktion:</b> <small>Das Material ermöglicht Zusammenarbeit bzw. Austausch unter Lernenden.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="A2" id="c10"><label for="c10"><b>Aufgabenstellung/Assessment und Feedback:</b> <small>Aufgaben sind klar formuliert, es gibt Möglichkeiten zur Selbst- bzw. Fremdüberprüfung und Feedback-Formate.</small></label></div>
+    </div>
+
+    <div class="subsection" data-section="A2_1">
+      <div class="subsection-header">
+        <h3>A2.1 KI-Aufgabenkultur</h3>
+        <label class="toggle-label"><input type="checkbox" class="section-toggle" data-section-toggle="A2_1" data-group="A" checked> Bereich einbeziehen</label>
+      </div>
+      <p class="subsection-intro">Details zur Aufgabenstellung: Umsetzung der KI-Aufgabenkultur (nach Falck/Flick 2025). Zur Förderung von KI-Kompetenzen bei Lernenden siehe die Checkliste im Bereich C1.</p>
+      <div class="criterion"><input type="checkbox" data-cat="A2_1" id="c11"><label for="c11"><b>KI-thematisierend:</b> <small>KI ist Lerngegenstand — Funktionsweise, Chancen/Risiken und gesellschaftlich-ethische Einordnung werden behandelt.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="A2_1" id="c12"><label for="c12"><b>KI-integrierend:</b> <small>KI wird als Werkzeug eingesetzt; der Einsatz ist didaktisch begründet, an Lernziele gebunden und geregelt.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="A2_1" id="c13"><label for="c13"><b>KI-reflektierend:</b> <small>Das Material regt an, KI-Ergebnisse zu prüfen, Verzerrungen (Bias) zu erkennen und eigene Nutzungsmotive zu hinterfragen.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="A2_1" id="c14"><label for="c14"><b>KI-limitierend:</b> <small>An geeigneten Stellen wird bewusst auf KI verzichtet, um Kompetenzen (z. B. eigenständiges Argumentieren) sichtbar zu sichern.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="A2_1" id="c15"><label for="c15"><b>Begründete Auswahl erkennbar:</b> <small>Es ist nachvollziehbar, warum diese Aufgabenart und dieser KI-Einsatzgrad für das Lernziel gewählt wurden.</small></label></div>
+    </div>
+
+    <!-- ============ B. Technische Dimension ============ -->
+    <h2>B. Technische Dimension</h2>
+
+    <div class="subsection" data-section="B1">
+      <div class="subsection-header">
+        <h3>B1. Zugänglichkeit</h3>
+        <label class="toggle-label"><input type="checkbox" class="section-toggle" data-section-toggle="B1" data-group="B" checked> Bereich einbeziehen</label>
+      </div>
+      <div class="criterion"><input type="checkbox" data-cat="B1" id="c16"><label for="c16"><b>Barrierefreiheit:</b> <small>Material ist für Menschen mit unterschiedlichen Voraussetzungen (Sehen, Hören, Sprache, technische Ausstattung) zugänglich.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="B1" id="c17"><label for="c17"><b>Technische Wiederverwendbarkeit/Anpassbarkeit:</b> <small>Material liegt in bearbeitbaren Formaten vor und kann angepasst werden.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="B1" id="c18"><label for="c18"><b>Zuverlässigkeit und Kompatibilität (offene Dateiformate):</b> <small>Es werden offene, plattformunabhängige Dateiformate verwendet; Material funktioniert zuverlässig.</small></label></div>
+    </div>
+
+    <div class="subsection" data-section="B2">
+      <div class="subsection-header">
+        <h3>B2. Usability</h3>
+        <label class="toggle-label"><input type="checkbox" class="section-toggle" data-section-toggle="B2" data-group="B" checked> Bereich einbeziehen</label>
+      </div>
+      <div class="criterion"><input type="checkbox" data-cat="B2" id="c19"><label for="c19"><b>Struktur, Navigation und Orientierung:</b> <small>Aufbau ist übersichtlich, Navigation ist intuitiv.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="B2" id="c20"><label for="c20"><b>Design und Lesbarkeit:</b> <small>Layout, Schriftgröße und Kontraste unterstützen die Lesbarkeit.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="B2" id="c21"><label for="c21"><b>Interaktivität:</b> <small>Interaktive Elemente funktionieren zuverlässig und unterstützen das Lernen.</small></label></div>
+    </div>
+
+    <div class="subsection" data-section="B3">
+      <div class="subsection-header">
+        <h3>B3. Rechtliche Qualität</h3>
+        <label class="toggle-label"><input type="checkbox" class="section-toggle" data-section-toggle="B3" data-group="B" checked> Bereich einbeziehen</label>
+      </div>
+      <div class="criterion"><input type="checkbox" data-cat="B3" id="c22"><label for="c22"><b>Korrekte Quellenangaben:</b> <small>Alle verwendeten Quellen, Daten und Zitate sind vollständig und korrekt ausgewiesen.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="B3" id="c23"><label for="c23"><b>Transparente Lizenzierung:</b> <small>Lizenz, Autorenschaft, Erstellungsdatum und Version sind eindeutig dokumentiert und passend zur beabsichtigten Weiterverwendung.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="B3" id="c24"><label for="c24"><b>Keine Verwendung urheberrechtlich geschützter Inhalte:</b> <small>Es werden keine fremden, nicht lizenzierten Inhalte ohne Erlaubnis verwendet.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="B3" id="c25"><label for="c25"><b>Kenntlichmachung urheberrechtlicher Einschränkungen:</b> <small>Einschränkungen, die sich z. B. aus den Nutzungsbedingungen eingesetzter KI-Tools ergeben, sind kenntlich gemacht.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="B3" id="c26"><label for="c26"><b>KI-Einsatz ist transparent gekennzeichnet:</b> <small>Es ist erkennbar, ob, mit welchem Tool und in welchem Umfang KI bei der Erstellung beigetragen hat, sowie der Grad menschlicher Nachbearbeitung (vollständig KI-generiert / KI-unterstützt / KI-geprüft).</small></label></div>
+    </div>
+
+    <!-- ============ C. KI-Integration ============ -->
+    <h2>C. KI-Integration <span style="font-size:.6em;font-weight:normal;color:var(--muted);">(wenn vorhanden und kenntlich gemacht)</span></h2>
+
+    <div class="subsection" data-section="C1">
+      <div class="subsection-header">
+        <h3>C1. Geförderte KI-Kompetenzen</h3>
+        <label class="toggle-label"><input type="checkbox" class="section-toggle" data-section-toggle="C1" data-group="C" checked> Bereich einbeziehen</label>
+      </div>
+      <p class="subsection-intro">Prüft, ob und welche KI-Kompetenzen bei den Lernenden durch das Material aufgebaut werden — unabhängig davon, ob KI im Material selbst zum Einsatz kommt. Grundlage ist das gemeinsame KI-Kompetenzrahmenmodell von OECD und Europäischer Kommission für die schulische Bildung („Empowering Learners for the Age of AI", 2026), das vier aufeinander aufbauende Domänen unterscheidet.</p>
+      <div class="criterion"><input type="checkbox" data-cat="C1" id="c27"><label for="c27"><b>Mit KI bewusst umgehen:</b> <small>Material befähigt dazu, sich kritisch und verantwortungsvoll mit einer von KI geprägten Welt auseinanderzusetzen.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="C1" id="c28"><label for="c28"><b>KI kreativ anwenden:</b> <small>Das Material regt dazu an, KI als kreativen Partner zu nutzen und dabei das selbstbestimmte menschliche Handeln zu bewahren.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="C1" id="c29"><label for="c29"><b>KI gezielt einsetzen:</b> <small>Das Material motiviert die Haltung, Arbeit bewusst zwischen Menschen und KI-Systemen aufzuteilen und den KI-Einsatz gezielt zu steuern.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="C1" id="c30"><label for="c30"><b>KI aktiv mitgestalten:</b> <small>Das Material regt dazu an, über die bloße Nutzung bestehender KI-Systeme hinauszugehen und die Funktionsweise dieser Systeme aktiv zu reflektieren und mitzugestalten.</small></label></div>
+    </div>
+
+    <div class="subsection" data-section="C2">
+      <div class="subsection-header">
+        <h3>C2. Niveau der Integration digitaler Technologien</h3>
+        <label class="toggle-label"><input type="checkbox" class="section-toggle" data-section-toggle="C2" data-group="C" checked> Bereich einbeziehen</label>
+      </div>
+      <p class="subsection-intro">Mit dem SAMR-Modell nach Ruben Puentedura (2006, Übersetzung Ekkehardt Brüggemann) lässt sich die Integrationstiefe von digitalen Technologien im didaktischen Kontext beurteilen. <strong>Wichtig:</strong> Wenn R, M oder A angekreuzt werden, immer auch alle „niedrigeren" Kategorien mitankreuzen.</p>
+      <div class="criterion"><input type="checkbox" data-cat="C2" id="c31"><label for="c31"><b>S — Substitution, Ersatz:</b> <small>Technik ist direkter Ersatz für Arbeitsmittel ohne funktionale Änderung (z. B. Lesen von Texten auf digitalen Endgeräten).</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="C2" id="c32"><label for="c32"><b>A — Augmentation, Erweiterung:</b> <small>Technik ist direkter Ersatz für Arbeitsmittel, mit funktionaler Verbesserung (z. B. Online-Recherche statt Lexika).</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="C2" id="c33"><label for="c33"><b>M — Modification, Änderung:</b> <small>Technik ermöglicht beachtliche Neugestaltung von Aufgaben (nur mithilfe digitaler Technik bearbeitbar, z. B. Tabellenkalkulation).</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="C2" id="c34"><label for="c34"><b>R — Redefinition, Neubelegung:</b> <small>Technik ermöglicht das Erzeugen neuartiger Aufgaben, die zuvor unvorstellbar waren (z. B. Erstellung digitaler Endprodukte, Aufbereitung schwer verständlicher Inhalte).</small></label></div>
+    </div>
+
+    <p class="subsection-intro" style="margin:0 4px;">Bereich C3 „Kritische Prüfung KI-generierter Inhalte" liegt in zwei Varianten vor — bitte <strong>entweder</strong> das PRÜFE-Framework <strong>oder</strong> die Antwort-Autopsie für die Bewertung einbeziehen.</p>
+
+    <div class="variant-group">
+      <div class="subsection" data-section="C3a">
+        <div class="subsection-header variant-header">
+          <h3>C3. Variante (1) — Kritische Prüfung KI-generierter Inhalte (PRÜFE)</h3>
+          <label class="toggle-label"><input type="radio" name="c3variant" class="section-toggle" data-section-toggle="C3a" data-group="C" checked> Diese Variante verwenden</label>
+        </div>
+        <p class="subsection-intro">Mit dem PRÜFE-Framework nach Barbara Geyer (2025):</p>
+        <div class="criterion"><input type="checkbox" data-cat="C3a" id="c35"><label for="c35"><b>P — Plausibilität:</b> <small>Die Aussagen, Zahlen und Struktur wirken beim ersten Lesen stimmig. Es gibt keine Widersprüche oder Auffälligkeiten.</small></label></div>
+        <div class="criterion"><input type="checkbox" data-cat="C3a" id="c36"><label for="c36"><b>R — Recherche:</b> <small>Zentrale Fakten/Daten wurden mit unabhängigen Quellen abgeglichen bzw. mit mehreren KI-Systemen quergeprüft.</small></label></div>
+        <div class="criterion"><input type="checkbox" data-cat="C3a" id="c37"><label for="c37"><b>Ü — Überzeugungen/Annahmen hinterfragt:</b> <small>Verdeckte Annahmen und mögliche Verzerrungen (kognitiv, strukturell, Präferenz) wurden identifiziert — z. B. einseitige Perspektiven auf Nachhaltigkeitsfragen.</small></label></div>
+        <div class="criterion"><input type="checkbox" data-cat="C3a" id="c38"><label for="c38"><b>F — Falsifizieren:</b> <small>Es wurde aktiv nach Gegenbeweisen/Gegenpositionen gesucht (nicht nur Bestätigung gesammelt).</small></label></div>
+        <div class="criterion"><input type="checkbox" data-cat="C3a" id="c39"><label for="c39"><b>E — Entscheiden:</b> <small>Es liegt eine dokumentierte, begründete Entscheidung vor (übernommen/angepasst/abgelehnt), idealerweise gegengeprüft durch eine zweite Person.</small></label></div>
+      </div>
+
+      <div class="subsection excluded" data-section="C3b">
+        <div class="subsection-header variant-header">
+          <h3>C3. Variante (2) — Kritische Prüfung KI-generierter Inhalte (Antwort-Autopsie)</h3>
+          <label class="toggle-label"><input type="radio" name="c3variant" class="section-toggle" data-section-toggle="C3b" data-group="C"> Diese Variante verwenden</label>
+        </div>
+        <p class="subsection-intro">Mit der Methode „Antwort-Autopsie" nach Lucca Spohn (2026): <em>„Eine KI-Antwort ist erst geprüft, wenn ich sagen kann, was sie behauptet, worauf sie sich stützt, was sie voraussetzt und was sie weglässt."</em></p>
+        <div class="criterion"><input type="checkbox" data-cat="C3b" id="c40"><label for="c40"><b>Behauptungen:</b> <small>Es wurden Aussagen getroffen, die überprüfbar sind.</small></label></div>
+        <div class="criterion"><input type="checkbox" data-cat="C3b" id="c41"><label for="c41"><b>Belege:</b> <small>Es sind Quellen oder Nachweise angegeben, die die Aussagen stützen.</small></label></div>
+        <div class="criterion"><input type="checkbox" data-cat="C3b" id="c42"><label for="c42"><b>Annahmen:</b> <small>Den Aussagen liegen stille Annahmen zugrunde, es wird etwas als gegeben vorausgesetzt.</small></label></div>
+        <div class="criterion"><input type="checkbox" data-cat="C3b" id="c43"><label for="c43"><b>Lücken:</b> <small>Es fehlt etwas, wichtige Informationen oder Perspektiven sind nicht vorhanden.</small></label></div>
+      </div>
+    </div>
+
+    <!-- ============ D. BNE-fachliche Kriterien ============ -->
+    <h2>D. BNE-fachliche Kriterien</h2>
+    <div class="subsection" data-section="D">
+      <div class="subsection-header">
+        <h3>D. BNE-fachliche Kriterien</h3>
+        <label class="toggle-label"><input type="checkbox" class="section-toggle" data-section-toggle="D" data-group="D" checked> Bereich einbeziehen</label>
+      </div>
+      <p class="subsection-intro">Für diesen Bereich wurden unterschiedliche Ansätze kombiniert, siehe Literaturverzeichnis (de Haan, 2008; Orientierungsrahmen Lernbereich Globale Entwicklung).</p>
+      <div class="criterion"><input type="checkbox" data-cat="D" id="c44"><label for="c44"><b>Bezug zu Nachhaltigkeitszielen (SDGs):</b> <small>Der SDG-Bezug ist erkennbar, exemplarische Fragestellungen sind relevant und mit Zukunftsbezug.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="D" id="c45"><label for="c45"><b>Gestaltungskompetenz im Fokus:</b> <small>Material fördert vorausschauendes Denken, interdisziplinäres Arbeiten und eigenständige/partizipative Lernprozesse.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="D" id="c46"><label for="c46"><b>Multiperspektivität:</b> <small>Ökologische, ökonomische und soziale Dimensionen von Nachhaltigkeit werden gemeinsam betrachtet; Interessenkonflikte werden thematisiert.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="D" id="c47"><label for="c47"><b>Handlungsorientierung:</b> <small>Reale Handlungsmöglichkeiten und Beteiligungsformen werden aufgezeigt, keine reine Problem- ohne Lösungsperspektive.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="D" id="c48"><label for="c48"><b>Globale und lokale Bezüge:</b> <small>Globale und lokale Perspektiven werden miteinander verknüpft (Globales Lernen).</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="D" id="c49"><label for="c49"><b>Vermeidung von Vereinfachung/Alarmismus:</b> <small>Die Komplexität von Nachhaltigkeitsfragen wird angemessen abgebildet; Widersprüche, Dilemmata und offene Fragen werden didaktisch aufgegriffen.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="D" id="c50"><label for="c50"><b>Ökologischer Fußabdruck der KI-Nutzung:</b> <small>Ressourcen-/Energieverbrauch generativer KI wird, wo passend, als Teil des BNE-Themas mitgedacht bzw. thematisiert.</small></label></div>
+    </div>
+  </form>
+
+  <!-- ============ Ergebnisübersicht ============ -->
+  <div class="page-break">
+    <h2>Ergebnisübersicht — Analysespinne</h2>
+    <p style="font-size:.9em;color:var(--muted);">Jede Achse zeigt den Erfüllungsgrad einer Hauptkategorie (A–D), gemittelt über die einbezogenen Unterkategorien. Ausgeschlossene Unterkategorien fließen nicht ein.</p>
+
+    <div class="results-panel">
+      <div class="results-grid">
+        <div id="chart-container">
+          <canvas id="spiderChart"></canvas>
+          <p id="chart-empty" style="display:none;">Alle Bereiche sind derzeit ausgeschlossen — bitte mindestens einen Bereich einbeziehen.</p>
+        </div>
+        <div class="results-summary">
+          <div class="counter"><span id="checkedCount">0</span> / <span id="totalCount">0</span> Kriterien</div>
+          <div class="counter-label">erfüllt (bezogen auf die einbezogenen Bereiche)</div>
+
+          <div id="recommendationBox" class="recommendation-box">
+            — noch keine Angaben —
+            <div id="recommendationSub" class="recommendation-sub"></div>
+          </div>
+
+          <button type="button" id="explainBtn" class="explain-link no-print">ℹ️ Wie wird diese Bewertung berechnet?</button>
+
+          <p class="note-a1b3">Hinweis: Materialien, die bei Kriterien in Block <strong>A1</strong> (fachliche Richtigkeit) oder <strong>B3</strong> (rechtliche Qualität) schwach abschneiden, sollten vor dem Einsatz gezielt nachgebessert werden. Details siehe <a href="#anhang-logik">Anhang: Bewertungslogik</a>.</p>
+
+          <p class="basis-line">Grundlage: Kriterienkatalog nach Becker et al. (2024) / Mayrberger & Zawacki-Richter (2018), ergänzt um das OECD/EU-Kompetenzrahmenmodell für KI (2026), das PRÜFE-Framework (B. Geyer), die Methode „Antwort-Autopsie" (L. Spohn) und die KI-Aufgabenkultur (Falck & Flick).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Anhang: Bewertungslogik ============ -->
+  <div class="page-break anhang-section" id="anhang-logik">
+    <h2>Anhang: Wie wird die Empfehlung berechnet?</h2>
+    <p>Die abschließende Einordnung („Empfohlen" / „Mit Anpassungen empfohlen" / „Nicht empfohlen") wird automatisch aus den angekreuzten Kriterien berechnet. Grundlage sind zwei Werte:</p>
+
+    <h3>1. Gesamterfüllungsgrad</h3>
+    <p>Über alle <strong>einbezogenen</strong> Unterkategorien (nicht ausgeschlossene Bereiche) hinweg wird gezählt, wie viele Kriterien angekreuzt sind, im Verhältnis zu allen möglichen Kriterien:</p>
+    <p><code>Gesamtwert = angekreuzte Kriterien ÷ mögliche Kriterien</code> (in den einbezogenen Bereichen)</p>
+    <p>Das ist derselbe Wert, der oben als „X / Y Kriterien" angezeigt wird.</p>
+
+    <h3>2. Sonderprüfung der Bereiche A1 und B3</h3>
+    <p>Unabhängig vom Gesamtwert wird zusätzlich geprüft, wie die Bereiche <strong>A1 (fachliche Richtigkeit)</strong> und <strong>B3 (rechtliche Qualität)</strong> jeweils für sich abschneiden — beide gelten als besonders kritisch für die Einsatzfähigkeit des Materials. Liegt einer der beiden Werte unter 60 %, wird dies als „schwach" markiert. Ist ein Bereich bewusst ausgeschlossen, fließt er nicht in diese Prüfung ein.</p>
+
+    <h3>3. Entscheidungstabelle</h3>
+    <table>
+      <thead><tr><th>Bedingung</th><th>Ergebnis</th></tr></thead>
+      <tbody>
+        <tr><td>Gesamtwert ≥ 80 % <strong>und</strong> A1/B3 nicht schwach</td><td>🟢 Empfohlen</td></tr>
+        <tr><td>Gesamtwert ≥ 50 % <strong>und</strong> A1/B3 nicht schwach</td><td>🟡 Mit Anpassungen empfohlen</td></tr>
+        <tr><td>Gesamtwert ≥ 50 %, aber A1 <strong>oder</strong> B3 schwach</td><td>🟡 Mit Anpassungen empfohlen (+ Hinweis auf A1/B3)</td></tr>
+        <tr><td>Gesamtwert &lt; 50 %</td><td>🔴 Nicht empfohlen</td></tr>
+      </tbody>
+    </table>
+    <p>Kurz gesagt: Der <strong>Gesamtprozentsatz bestimmt die Grundstufe</strong> (80 %-/50 %-Schwelle), während <strong>A1 und B3 als „Veto"</strong> wirken — selbst bei hoher Gesamterfüllung verhindern schwache Werte dort die Bestnote „Empfohlen".</p>
+    <p style="color:var(--muted);font-size:.88em;">Sind noch keine Kriterien angekreuzt, erscheint „— noch keine Angaben —". Die Schwellenwerte (80 % / 50 % / 60 %) sind eine Orientierungshilfe und können bei Bedarf angepasst werden.</p>
+  </div>
+
+  <!-- ============ Quellen ============ -->
+  <div class="page-break">
+    <h2>Quellen</h2>
+    <div class="quellen" style="font-size:.88em;color:#444;">
+      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Becker, V., Schaper, F., Schulte-Buskase, A. & Tibbe, T. (2024): (Qualitäts-)Ansprüche an OER: Zur Entwicklung eines Kriterienkatalogs für OER im Kontext von inklusionsbezogener Lehrkräftebildung. In: <em>MedienPädagogik: Zeitschrift für Theorie und Praxis der Medienbildung.</em> Online verfügbar unter <a href="https://www.researchgate.net" target="_blank" rel="noopener">researchgate.net</a></p>
+
+      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">de Haan, Gerhard (2008): Gestaltungskompetenz als Kompetenzkonzept der Bildung für nachhaltige Entwicklung. In: Bormann, Inka; de Haan, Gerhard (Hrsg.): <em>Kompetenzen der Bildung für nachhaltige Entwicklung. Operationalisierung, Messung, Rahmenbedingungen, Befunde.</em> Wiesbaden: VS Verlag für Sozialwissenschaften, S. 23–44.</p>
+
+      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Falck, J. & Flick, M. (2025): KI-Didaktik: Eine Planungsvorlage zur Aufgabenkultur im KI-Zeitalter. Online verfügbar unter <a href="https://joschafalck.de" target="_blank" rel="noopener">joschafalck.de</a></p>
+
+      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Geyer, B. (2025): Nicht alles glauben, was KI sagt — Das PRÜFE-Framework für kritische KI-Bewertung. Online verfügbar unter <a href="https://barbarageyer.substack.com" target="_blank" rel="noopener">barbarageyer.substack.com</a></p>
+
+      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Klein, A. (2026): KI, OER und OEP — für eine nachhaltige Openness. Learntec-Vortrag. Online verfügbar unter <a href="https://hnd-bw.de" target="_blank" rel="noopener">hnd-bw.de</a></p>
+
+      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Kultusministerkonferenz (KMK) & Bundesministerium für wirtschaftliche Zusammenarbeit und Entwicklung (BMZ) (Hrsg.) (2016): <em>Orientierungsrahmen für den Lernbereich Globale Entwicklung im Rahmen einer Bildung für nachhaltige Entwicklung.</em> 2., aktualisierte und erweiterte Auflage. Bonn: Cornelsen.</p>
+
+      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Mayrberger, K. & Zawacki-Richter, O. (2018): Qualität von OER: Internationale Bestandsaufnahme von Instrumenten zur Qualitätssicherung von Open Educational Resources (OER) — Schritte zu einem deutschen Modell am Beispiel der Hamburg Open Online University. Online verfügbar unter <a href="https://www.researchgate.net" target="_blank" rel="noopener">researchgate.net</a></p>
+
+      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Medienzentrum Hofgeismar / Wolfhagen (o. J.): SAMR-Modell zur Integration von digitalen Technologien im Unterricht. Online verfügbar unter <a href="https://mz-hofgeismar.de/apps/" target="_blank" rel="noopener">mz-hofgeismar.de/apps</a></p>
+
+      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Ministerium für Schule und Bildung des Landes Nordrhein-Westfalen (MSB) (Hrsg.) (2019): <em>Leitlinie Bildung für nachhaltige Entwicklung.</em> Düsseldorf.</p>
+
+      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Spohn, Lucca (2026): Eine KI-Antwort ist kein Text. Online verfügbar unter <a href="https://luccaspohn.substack.com/p/eine-ki-antwort-ist-kein-text" target="_blank" rel="noopener">luccaspohn.substack.com</a></p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============ Modal: Erklärung der Bewertungslogik ============ -->
+<div class="modal-overlay no-print" id="explainModal">
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="explainModalTitle">
+    <button type="button" class="modal-close" id="modalCloseBtn" aria-label="Schließen">&times;</button>
+    <h3 id="explainModalTitle">Wie wird die Empfehlung berechnet?</h3>
+    <p><strong>1. Gesamterfüllungsgrad:</strong> angekreuzte Kriterien ÷ mögliche Kriterien, gezählt über alle einbezogenen Bereiche (= „X / Y Kriterien" oben).</p>
+    <p><strong>2. Sonderprüfung A1 &amp; B3:</strong> Liegt der Erfüllungsgrad in <code>A1</code> (fachliche Richtigkeit) oder <code>B3</code> (rechtliche Qualität) unter 60 %, gilt das als „schwach" — unabhängig vom Gesamtwert.</p>
+    <table>
+      <thead><tr><th>Bedingung</th><th>Ergebnis</th></tr></thead>
+      <tbody>
+        <tr><td>Gesamt ≥ 80 %, A1/B3 nicht schwach</td><td>🟢 Empfohlen</td></tr>
+        <tr><td>Gesamt ≥ 50 %, A1/B3 nicht schwach</td><td>🟡 Mit Anpassungen empfohlen</td></tr>
+        <tr><td>Gesamt ≥ 50 %, aber A1 oder B3 schwach</td><td>🟡 Mit Anpassungen empfohlen (+ Hinweis)</td></tr>
+        <tr><td>Gesamt &lt; 50 %</td><td>🔴 Nicht empfohlen</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:.88em;color:var(--muted);">A1 und B3 wirken also als „Veto": Auch bei hoher Gesamterfüllung verhindern schwache Werte dort die Bestnote. Ausführliche Erklärung siehe <a href="#anhang-logik" id="modalAnhangLink">Anhang: Bewertungslogik</a> im Dokument.</p>
   </div>
 </div>
 
-<header class="top">
-  <p class="eyebrow">ZfL Köln · Kriterienkatalog OER &amp; KI · BNE</p>
-  <h1>Bewertung von OER- und KI-gestütztem&nbsp;Material zu BNE</h1>
-  <p class="lede">Die Kriterien dienen als Bewertungs- und Orientierungshilfe. Es müssen nicht alle Kriterien erfüllt sein. Kreuzen Sie die zutreffenden Kriterien an — am Ende der Seite aktualisiert sich die Analysespinne automatisch und Sie erhalten eine grafische Einordnung zur Einsatzfähigkeit des Materials.</p>
-  <nav class="jump" id="jumpNav"></nav>
-</header>
-
-<div class="wrap">
-  <main id="maincats"></main>
-
-  <section class="results" id="results">
-    <div class="results-head">
-      <div>
-        <h2>Ergebnisübersicht — Analysespinne</h2>
-        <p>Jede Achse zeigt den durchschnittlichen Erfüllungsgrad einer Hauptkategorie (A–D). Die Fläche wächst automatisch mit jedem gesetzten Häkchen.</p>
-      </div>
-      <span class="verdict" id="verdictBadge">— noch keine Angaben —</span>
-    </div>
-
-    <div class="spider-layout">
-      <div class="chart-shell"><div id="spiderChart" role="img" aria-label="Analysespinne der vier Hauptkategorien"></div></div>
-      <div class="legend-list" id="legendList"></div>
-    </div>
-
-    <div class="rec-box" id="recBox">
-      Beginnen Sie oben mit dem Ankreuzen der Kriterien — die Empfehlung wird hier automatisch ergänzt.
-    </div>
-  </section>
-</div>
-
-<footer class="credit">
-  Grundlage: Kriterienkatalog des ZfL der Universität zu Köln (nach Becker et al. 2024 / Mayrberger &amp; Zawacki-Richter 2018), ergänzt um das OECD/EU AILit Framework (2026), das PRÜFE-Framework (B. Geyer), die Methode „Antwort-Autopsie“ (L. Spohn) und die KI-Aufgabenkultur (Falck &amp; Flick).
-</footer>
-
 <script>
-const COLORS = {
-  A: { main:"#005176", tint:"#e4eef3", dark:"#00374f", name:"Pädagogisch-didaktische Dimension" },
-  B: { main:"#009dcc", tint:"#e1f5fb", dark:"#0a6f8f", name:"Technische Dimension" },
-  C: { main:"#fbbb33", tint:"#fff6e0", dark:"#8a5f12", name:"KI-Integration (wenn kenntlich gemacht)" },
-  D: { main:"#dc587f", tint:"#fbe8ee", dark:"#9c2f52", name:"BNE-fachliche Kriterien" },
-};
-
-// ---- Data model, transcribed from the uploaded document ----
-const MAINCATS = [
-  {
-    id:"A", ...COLORS.A,
-    subs:[
-      { id:"A1", name:"Inhaltliche Dimension", items:[
-        "Zielgruppenorientierung und Anwendungsbereich: Zielgruppe und Einsatzbereich sind klar definiert und das Material ist darauf abgestimmt.",
-        "Fachliche Richtigkeit und Fundierung: Inhalte sind fachlich korrekt, aktuell und belegt; bei KI-Inhalten ist eine fachliche Prüfung erfolgt (siehe PRÜFE-Check, Abschnitt C2).",
-        "Vollständigkeit und Kohärenz: Das Thema wird in sich schlüssig und ohne inhaltliche Lücken behandelt.",
-        "Inhaltliche Verwendbarkeit: Inhalte sind mit geringem Aufwand im Unterricht/in der Bildungsarbeit nutzbar.",
-        "Lehrplan- und Bildungsstandards: Es besteht ein erkennbarer Bezug zu curricularen Vorgaben und Bildungsstandards."
-      ]},
-      { id:"A2", name:"Didaktische Dimension", items:[
-        "Motivation/Vielfalt der Lernzugänge: Unterschiedliche Zugänge (visuell, handelnd, diskursiv, forschend) werden angesprochen.",
-        "Anwendung und Transfer: Es besteht die Möglichkeit zur Übertragung auf eigene Praxis bzw. reale Situationen.",
-        "Differenzierung und Support: Angebote in unterschiedlichen Niveaustufen, Erklärhilfen und Unterstützungsangebote sind vorhanden.",
-        "Kollaboration und Interaktion: Das Material ermöglicht Zusammenarbeit bzw. Austausch unter Lernenden.",
-        "Aufgabenstellung/Assessment und Feedback: Aufgaben sind klar formuliert, mit Möglichkeiten zur Überprüfung und Feedback."
-      ]},
-      { id:"A2.1", name:"Umsetzung der KI-Aufgabenkultur (nach Falck/Flick)",
-        standalone:true,
-        note:"Details zur Aufgabenstellung. Für die Förderung von KI-Kompetenzen bei den Lernenden siehe die eigene Checkliste unter C1.",
-        items:[
-          "KI-thematisierend: KI ist Lerngegenstand – Funktionsweise, Chancen/Risiken und ethische Einordnung werden behandelt.",
-          "KI-integrierend: KI wird als Werkzeug eingesetzt; der Einsatz ist didaktisch begründet und geregelt.",
-          "KI-reflektierend: Das Material regt an, KI-Ergebnisse zu prüfen und eigene Nutzungsmotive zu hinterfragen.",
-          "KI-limitierend: An geeigneten Stellen wird bewusst auf KI verzichtet, um Kompetenzen sichtbar zu sichern.",
-          "Begründete Auswahl erkennbar: Nachvollziehbar, warum dieser KI-Einsatzgrad für das Lernziel gewählt wurde."
-        ]
-      },
-    ]
-  },
-  {
-    id:"B", ...COLORS.B,
-    subs:[
-      { id:"B1", name:"Zugänglichkeit", items:[
-        "Barrierefreiheit: Material ist für Menschen mit unterschiedlichen Voraussetzungen zugänglich.",
-        "Technische Wiederverwendbarkeit/Anpassbarkeit: Material liegt in bearbeitbaren Formaten vor.",
-        "Zuverlässigkeit und Kompatibilität (offene Dateiformate): Offene, plattformunabhängige Formate werden verwendet."
-      ]},
-      { id:"B2", name:"Usability", items:[
-        "Struktur, Navigation und Orientierung: Aufbau ist übersichtlich, Navigation ist intuitiv.",
-        "Design und Lesbarkeit: Layout, Schriftgröße und Kontraste unterstützen die Lesbarkeit.",
-        "Interaktivität: Interaktive Elemente funktionieren zuverlässig und unterstützen das Lernen."
-      ]},
-      { id:"B3", name:"Rechtliche Qualität", items:[
-        "Korrekte Quellenangaben: Alle Quellen, Daten und Zitate sind vollständig und korrekt ausgewiesen.",
-        "Transparente Lizenzierung: Lizenz, Autorenschaft, Erstellungsdatum und Version sind eindeutig dokumentiert.",
-        "Keine Verwendung urheberrechtlich geschützter Inhalte ohne Erlaubnis.",
-        "Kenntlichmachung urheberrechtlicher Einschränkungen (z. B. durch verwendete KI-Tools).",
-        "KI-Einsatz ist transparent gekennzeichnet: Tool, Umfang und Grad der menschlichen Nachbearbeitung sind erkennbar."
-      ]},
-    ]
-  },
-  {
-    id:"C", ...COLORS.C, name:"KI-Integration (wenn vorhanden und kenntlich gemacht)",
-    subs:[
-      { id:"C1", name:"Geförderte KI-Kompetenzen",
-        standalone:true,
-        note:"Prüft, ob und welche KI-Kompetenzen bei den Lernenden aufgebaut werden — unabhängig davon, ob KI im Material selbst zum Einsatz kommt (nach OECD/EU AILit Framework, 2026). Zur Aufgabenkultur beim KI-Einsatz selbst siehe die eigene Checkliste unter A2.1.",
-        items:[
-          "Mit KI bewusst umgehen: Material befähigt dazu, sich kritisch und verantwortungsvoll mit einer von KI geprägten Welt auseinanderzusetzen.",
-          "KI kreativ anwenden: Das Material regt an, KI als kreativen Partner zu nutzen und dabei selbstbestimmtes Handeln zu bewahren.",
-          "KI gezielt einsetzen: Das Material motiviert, Arbeit bewusst zwischen Mensch und KI aufzuteilen und den Einsatz gezielt zu steuern.",
-          "KI aktiv mitgestalten: Das Material regt an, die Funktionsweise von KI-Systemen aktiv zu reflektieren und mitzugestalten."
-        ]
-      },
-      { id:"C2", name:"Kritische Prüfung KI-generierter Inhalte", type:"choice",
-        note:"Wählen Sie einen der beiden Prüfansätze — ein vollständig abgehakter Block entspricht 100 %.",
-        blocks:[
-          { name:"PRÜFE-Framework (B. Geyer)", items:[
-            "P – Plausibilität: Die Aussagen, Zahlen und Struktur wirken beim ersten Lesen stimmig. Es gibt keine Widersprüche oder Auffälligkeiten.",
-            "R – Recherche: Zentrale Fakten/Daten wurden mit unabhängigen Quellen abgeglichen bzw. mit mehreren KI-Systemen quergeprüft.",
-            "Ü – Überzeugungen/Annahmen hinterfragt: Verdeckte Annahmen und mögliche Verzerrungen (kognitiv, strukturell, Präferenz) wurden identifiziert.",
-            "F – Falsifizieren: Es wurde aktiv nach Gegenbeweisen/Gegenpositionen gesucht (nicht nur Bestätigung gesammelt).",
-            "E – Entscheiden: Es liegt eine dokumentierte, begründete Entscheidung vor, idealerweise gegengeprüft durch eine zweite Person."
-          ]},
-          { name:"Antwort-Autopsie (L. Spohn)", items:[
-            "Behauptungen: Es wurden Aussagen getroffen, die überprüfbar sind.",
-            "Belege: Es sind Quellen oder Nachweise angegeben, die die Aussagen stützen.",
-            "Annahmen: Den Aussagen liegen stille Annahmen zugrunde, es wird etwas als gegeben vorausgesetzt.",
-            "Lücken: Es fehlt etwas, wichtige Informationen oder Perspektiven sind nicht vorhanden."
-          ]},
-        ]
-      },
-    ]
-  },
-  {
-    id:"D", ...COLORS.D,
-    subs:[
-      { id:"D", name:"BNE-fachliche Kriterien", hideHeader:true, items:[
-        "Gestaltungskompetenz im Fokus: Material fördert vorausschauendes Denken, interdisziplinäres Arbeiten und eigenständiges Handeln.",
-        "Multiperspektivität: Ökologische, ökonomische und soziale Dimensionen werden gemeinsam betrachtet.",
-        "Bezug zu Nachhaltigkeitszielen (SDGs): Der SDG-Bezug ist erkennbar, kein „Greenwashing“ des Materials selbst.",
-        "Handlungsorientierung: Reale Handlungsmöglichkeiten und Beteiligungsformen werden aufgezeigt.",
-        "Globale und lokale Bezüge: Globale und lokale Perspektiven werden miteinander verknüpft.",
-        "Vermeidung von Vereinfachung/Alarmismus: Komplexität wird angemessen abgebildet.",
-        "Ökologischer Fußabdruck der KI-Nutzung: Ressourcen-/Energieverbrauch generativer KI wird mitgedacht."
-      ]},
-    ]
-  },
-];
-
-// ---- render ----
-const root = document.getElementById("maincats");
-const jumpNav = document.getElementById("jumpNav");
-let totalItems = 0;
-let allCheckboxes = []; // {el, subId}
-const subMeta = {}; // subId -> {count, mainId, blocks?:[{count}]}
-
-MAINCATS.forEach(main => {
-  const a0 = document.createElement("a");
-  a0.href = "#main-" + main.id;
-  a0.innerHTML = `<span class="dot" style="background:${main.main}"></span>${main.id}`;
-  jumpNav.appendChild(a0);
-
-  const section = document.createElement("section");
-  section.className = "maincat";
-  section.id = "main-" + main.id;
-  section.innerHTML = `
-    <div class="maincat-head" style="background:${main.main}">
-      <div>
-        <span class="maincat-id">${main.id}</span>
-        <h2>${main.name}</h2>
-      </div>
-      <span class="maincat-badge" id="badge-${main.id}"><span class="ring"></span><span id="badge-text-${main.id}">0%</span></span>
-    </div>
-    <div class="maincat-body" id="body-${main.id}"></div>
-  `;
-  root.appendChild(section);
-  const body = section.querySelector(`#body-${main.id}`);
-
-  main.subs.forEach(sub => {
-    subMeta[sub.id] = { mainId: main.id };
-
-    const a = document.createElement("a");
-    a.href = "#sub-" + sub.id;
-    a.innerHTML = `<span class="dot" style="background:${main.main}"></span>${sub.id}`;
-    if(!sub.hideHeader) jumpNav.appendChild(a);
-
-    const subEl = document.createElement("div");
-    subEl.className = "subcat" + (sub.standalone ? " standalone" : "");
-    subEl.id = "sub-" + sub.id;
-    subEl.style.borderColor = sub.standalone ? main.main : main.tint;
-    if(sub.standalone){
-      subEl.style.borderWidth = "2px";
-      const divider = document.createElement("div");
-      divider.className = "standalone-divider";
-      divider.innerHTML = `<span style="color:${main.main}">⟡ eigener Prüfbereich</span>`;
-      body.appendChild(divider);
-    }
-
-    let headHtml = "";
-    if(!sub.hideHeader){
-      headHtml = `
-        <div class="subcat-head" style="background:${main.tint}; border-left-color:${main.main};">
-          <div class="subcat-title">
-            <span class="subcat-id" style="color:${main.dark}">${sub.id}</span>
-            <span class="subcat-name" style="color:${main.dark}">${sub.name}</span>
-          </div>
-          <span class="subcat-count" id="count-${sub.id}" style="color:${main.dark}">0 / ${(sub.items||[]).concat((sub.blocks||[]).flatMap(b=>b.items)).length}</span>
-        </div>
-        <div class="subcat-track"><div class="subcat-fill" id="fill-${sub.id}" style="background:${main.main}"></div></div>
-        ${sub.note ? `<div class="subcat-note" style="${sub.standalone ? `background:${main.tint}; color:${main.dark}; font-style:normal; padding:10px 16px; margin:0;` : ""}">${sub.note}</div>` : ""}
-      `;
-    }
-    subEl.innerHTML = headHtml;
-
-    if(sub.type === "choice"){
-      subMeta[sub.id].blocks = sub.blocks.map(b => ({ count: b.items.length }));
-      const group = document.createElement("div");
-      group.className = "block-group";
-      sub.blocks.forEach((block, bi) => {
-        const blockEl = document.createElement("div");
-        blockEl.className = "block";
-        blockEl.innerHTML = `
-          <div class="block-head" style="background:${main.tint}; color:${main.dark};">
-            <span>${block.name}</span>
-            <span id="blockcount-${sub.id}-${bi}">0 / ${block.items.length}</span>
-          </div>
-          <div class="block-track"><div class="block-fill" id="blockfill-${sub.id}-${bi}" style="background:${main.main}"></div></div>
-          <div class="items" id="blockitems-${sub.id}-${bi}"></div>
-        `;
-        group.appendChild(blockEl);
-        const itemsRoot = blockEl.querySelector(`#blockitems-${sub.id}-${bi}`);
-        block.items.forEach((text, ii) => {
-          const id = `chk-${sub.id}-b${bi}-${ii}`;
-          const row = document.createElement("div");
-          row.className = "item";
-          row.innerHTML = `<input type="checkbox" id="${id}" data-sub="${sub.id}" data-block="${bi}"><label for="${id}">${text}</label>`;
-          itemsRoot.appendChild(row);
-          const input = row.querySelector("input");
-          input.style.setProperty("--accent", main.main);
-          input.addEventListener("change", () => { row.classList.toggle("checked", input.checked); updateAll(); });
-          allCheckboxes.push(input);
-          totalItems++;
-        });
-      });
-      subEl.appendChild(group);
-    } else {
-      subMeta[sub.id].count = sub.items.length;
-      const itemsRoot = document.createElement("div");
-      itemsRoot.className = "items";
-      itemsRoot.style.padding = sub.hideHeader ? "0" : "0";
-      sub.items.forEach((text, ii) => {
-        const id = `chk-${sub.id}-${ii}`;
-        const row = document.createElement("div");
-        row.className = "item";
-        row.innerHTML = `<input type="checkbox" id="${id}" data-sub="${sub.id}"><label for="${id}">${text}</label>`;
-        itemsRoot.appendChild(row);
-        const input = row.querySelector("input");
-        input.addEventListener("change", () => { row.classList.toggle("checked", input.checked); updateAll(); });
-        allCheckboxes.push(input);
-        totalItems++;
-      });
-      subEl.appendChild(itemsRoot);
-    }
-
-    // colorize checkbox check-fill via inline style rule using accent color per main
-    subEl.querySelectorAll('input[type=checkbox]').forEach(cb=>{
-      cb.style.setProperty('--chk', main.main);
-    });
-
-    body.appendChild(subEl);
-  });
-});
-
-// checkbox checked visuals (accent color per main category) via dynamic style tag
-const styleTag = document.createElement("style");
-styleTag.textContent = MAINCATS.map(m => `
-  #main-${m.id} input[type=checkbox]:checked{ border-color:${m.main}; background:${m.main}; }
-`).join("\n");
-document.head.appendChild(styleTag);
-
-// Legend + chart setup
-const legendList = document.getElementById("legendList");
-MAINCATS.forEach(main => {
-  const row = document.createElement("div");
-  row.className = "legend-row";
-  row.innerHTML = `
-    <span class="legend-swatch" style="background:${main.main}"></span>
-    <span class="legend-name">${main.id} · ${main.name}</span>
-    <span class="legend-pct" id="lpct-${main.id}">0%</span>
-    <span class="legend-track"><span class="legend-fill" id="lfill-${main.id}" style="background:${main.main}"></span></span>
-    <span class="legend-subs">${main.subs.map(s=>`<span class="legend-sub-chip" id="chip-${s.id}">${s.id}: 0%</span>`).join("")}</span>
-  `;
-  legendList.appendChild(row);
-});
-
-// ---- Self-contained SVG radar chart (no external library / CDN dependency) ----
-const spiderMount = document.getElementById("spiderChart");
-const axisColors = MAINCATS.map(m => m.main);
-const axisLabels = MAINCATS.map(m => m.id);
-const axisFullNames = MAINCATS.map(m => m.name);
-
-function renderSpider(values){
-  const size = 360;
-  const cx = size/2, cy = size/2 + 6;
-  const R = 118;
-  const n = values.length;
-  const angleFor = i => (Math.PI*2/n)*i - Math.PI/2;
-
-  const pt = (i, r) => {
-    const a = angleFor(i);
-    return [cx + r*Math.cos(a), cy + r*Math.sin(a)];
+  // Unterkategorien: welcher Hauptkategorie (A-D) sie zugeordnet sind + Gesamtzahl Kriterien
+  const subcats = {
+    'A1':   { group: 'A', total: 5 },
+    'A2':   { group: 'A', total: 5 },
+    'A2_1': { group: 'A', total: 5 },
+    'B1':   { group: 'B', total: 3 },
+    'B2':   { group: 'B', total: 3 },
+    'B3':   { group: 'B', total: 5 },
+    'C1':   { group: 'C', total: 4 },
+    'C2':   { group: 'C', total: 4 },
+    'C3a':  { group: 'C', total: 5 },
+    'C3b':  { group: 'C', total: 4 },
+    'D':    { group: 'D', total: 7 }
   };
+  const groupLabels = { A: 'A — Pädagogisch-didaktisch', B: 'B — Technisch', C: 'C — KI-Integration', D: 'D — BNE-fachlich' };
+  const groupOrder = ['A', 'B', 'C', 'D'];
 
-  // grid rings at 25/50/75/100
-  let gridPolys = "";
-  [25,50,75,100].forEach(level => {
-    const r = R * level/100;
-    const pts = Array.from({length:n}, (_,i)=>pt(i,r).join(",")).join(" ");
-    gridPolys += `<polygon points="${pts}" fill="none" stroke="#e4e8ea" stroke-width="1"/>`;
+  const ctx = document.getElementById('spiderChart').getContext('2d');
+  const spiderChart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: groupOrder.map(g => groupLabels[g]),
+      datasets: [{
+        label: 'Erfüllungsgrad (%)',
+        data: [0, 0, 0, 0],
+        backgroundColor: 'rgba(52, 152, 219, 0.2)',
+        borderColor: 'rgba(52, 152, 219, 1)',
+        pointBackgroundColor: 'rgba(41, 128, 185, 1)',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      scales: {
+        r: {
+          angleLines: { display: true },
+          suggestedMin: 0,
+          suggestedMax: 100,
+          ticks: { stepSize: 20, callback: value => value + '%' }
+        }
+      },
+      plugins: { legend: { position: 'top' } }
+    }
   });
 
-  // axis lines
-  let axisLines = "";
-  for(let i=0;i<n;i++){
-    const [x,y] = pt(i,R);
-    axisLines += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#e4e8ea" stroke-width="1"/>`;
+  function isActive(key) {
+    const toggle = document.querySelector(`[data-section-toggle="${key}"]`);
+    return toggle ? toggle.checked : true;
   }
 
-  // data polygon
-  const dataPts = values.map((v,i)=>pt(i, R*(Math.max(0,Math.min(100,v))/100)));
-  const dataPolyStr = dataPts.map(p=>p.join(",")).join(" ");
+  function updateChart() {
+    // Aggregation je Hauptkategorie A-D, nur über aktive Unterkategorien
+    const groupChecked = { A: 0, B: 0, C: 0, D: 0 };
+    const groupTotal   = { A: 0, B: 0, C: 0, D: 0 };
+    let anyActive = false;
 
-  // data points
-  let dots = "";
-  dataPts.forEach(([x,y],i)=>{
-    dots += `<circle cx="${x}" cy="${y}" r="5" fill="${axisColors[i]}" stroke="#fff" stroke-width="1.5"/>`;
-  });
+    Object.keys(subcats).forEach(key => {
+      if (!isActive(key)) return;
+      anyActive = true;
+      const { group, total } = subcats[key];
+      const checkedCount = document.querySelectorAll(`input[data-cat="${key}"]:checked`).length;
+      groupChecked[group] += checkedCount;
+      groupTotal[group]   += total;
+    });
 
-  // labels (id + percentage), positioned outside ring, aligned by quadrant
-  let labels = "";
-  for(let i=0;i<n;i++){
-    const [lx,ly] = pt(i, R + 34);
-    const a = angleFor(i);
-    let anchor = "middle";
-    if (Math.cos(a) > 0.3) anchor = "start";
-    else if (Math.cos(a) < -0.3) anchor = "end";
-    labels += `
-      <text x="${lx}" y="${ly-4}" text-anchor="${anchor}" font-family="IBM Plex Sans" font-weight="700" font-size="13" fill="${axisColors[i]}">${axisLabels[i]}</text>
-      <text x="${lx}" y="${ly+12}" text-anchor="${anchor}" font-family="IBM Plex Mono" font-size="11" fill="${axisColors[i]}">${values[i]}%</text>
-    `;
-  }
+    const chartEl = document.getElementById('chart-container');
+    const emptyMsg = document.getElementById('chart-empty');
+    const canvas = document.getElementById('spiderChart');
 
-  // ring value labels (25/50/75/100) near top axis
-  let ringLabels = "";
-  [25,50,75,100].forEach(level=>{
-    const r = R*level/100;
-    ringLabels += `<text x="${cx+6}" y="${cy-r+3}" font-family="IBM Plex Mono" font-size="9" fill="#9aa6ac">${level}</text>`;
-  });
+    if (!anyActive) {
+      canvas.style.display = 'none';
+      emptyMsg.style.display = 'block';
+    } else {
+      canvas.style.display = 'block';
+      emptyMsg.style.display = 'none';
 
-  spiderMount.innerHTML = `
-    <svg viewBox="0 0 ${size} ${size+20}" width="100%" role="presentation">
-      ${gridPolys}
-      ${axisLines}
-      ${ringLabels}
-      <polygon points="${dataPolyStr}" fill="rgba(15,36,56,0.10)" stroke="rgba(15,36,56,0.45)" stroke-width="2" stroke-linejoin="round"/>
-      ${dots}
-      ${labels}
-    </svg>
-  `;
-}
-
-renderSpider(MAINCATS.map(()=>0));
-
-function updateAll(){
-  let totalChecked = 0;
-
-  // per-sub percentages
-  const subPct = {};
-  Object.keys(subMeta).forEach(subId => {
-    const meta = subMeta[subId];
-    if(meta.blocks){
-      const pcts = meta.blocks.map((b, bi) => {
-        const boxes = allCheckboxes.filter(cb => cb.dataset.sub === subId && cb.dataset.block === String(bi));
-        const checked = boxes.filter(cb => cb.checked).length;
-        totalChecked += checked;
-        const pct = b.count ? Math.round((checked / b.count) * 100) : 0;
-        document.getElementById(`blockcount-${subId}-${bi}`).textContent = `${checked} / ${b.count}`;
-        document.getElementById(`blockfill-${subId}-${bi}`).style.width = pct + "%";
-        return pct;
+      const labels = [];
+      const data = [];
+      groupOrder.forEach(g => {
+        if (groupTotal[g] > 0) {
+          labels.push(groupLabels[g]);
+          data.push(Math.round((groupChecked[g] / groupTotal[g]) * 100));
+        }
       });
-      const best = Math.max(...pcts);
-      subPct[subId] = best;
-      const el = document.getElementById(`fill-${subId}`);
-      if(el) el.style.width = best + "%";
-      const countEl = document.getElementById(`count-${subId}`);
-      if(countEl){
-        const totalC = meta.blocks.reduce((a,b,i)=>a + allCheckboxes.filter(cb=>cb.dataset.sub===subId && cb.dataset.block===String(i) && cb.checked).length,0);
-        const totalN = meta.blocks.reduce((a,b)=>a+b.count,0);
-        countEl.textContent = `${totalC} / ${totalN} (bester Block: ${best}%)`;
-      }
-    } else {
-      const boxes = allCheckboxes.filter(cb => cb.dataset.sub === subId && cb.dataset.block === undefined);
-      const checked = boxes.filter(cb => cb.checked).length;
-      totalChecked += checked;
-      const pct = meta.count ? Math.round((checked / meta.count) * 100) : 0;
-      subPct[subId] = pct;
-      const el = document.getElementById(`fill-${subId}`);
-      if(el) el.style.width = pct + "%";
-      const countEl = document.getElementById(`count-${subId}`);
-      if(countEl) countEl.textContent = `${checked} / ${meta.count}`;
+      spiderChart.data.labels = labels;
+      spiderChart.data.datasets[0].data = data;
+      spiderChart.update();
     }
+
+    // Gesamtzähler
+    const totalChecked = Object.values(groupChecked).reduce((a, b) => a + b, 0);
+    const totalAll = Object.values(groupTotal).reduce((a, b) => a + b, 0);
+    document.getElementById('checkedCount').textContent = totalChecked;
+    document.getElementById('totalCount').textContent = totalAll;
+
+    updateRecommendation(totalChecked, totalAll, groupChecked, groupTotal);
+  }
+
+  function pct(checked, total) {
+    return total > 0 ? checked / total : null;
+  }
+
+  function updateRecommendation(totalChecked, totalAll, groupChecked, groupTotal) {
+    const box = document.getElementById('recommendationBox');
+    const sub = document.getElementById('recommendationSub');
+    box.classList.remove('rec-empfohlen', 'rec-anpassung', 'rec-nicht');
+
+    if (totalAll === 0 || totalChecked === 0) {
+      box.textContent = '— noch keine Angaben —';
+      sub.textContent = '';
+      box.appendChild(sub);
+      return;
+    }
+
+    const overall = pct(totalChecked, totalAll);
+    const a1 = pct(groupChecked.A, groupTotal.A); // grobe Näherung, da A1 Teil von Gruppe A ist
+    const a1Direct = (() => {
+      if (!isActive('A1')) return null;
+      return document.querySelectorAll('input[data-cat="A1"]:checked').length / subcats.A1.total;
+    })();
+    const b3Direct = (() => {
+      if (!isActive('B3')) return null;
+      return document.querySelectorAll('input[data-cat="B3"]:checked').length / subcats.B3.total;
+    })();
+
+    const a1b3Weak = (a1Direct !== null && a1Direct < 0.6) || (b3Direct !== null && b3Direct < 0.6);
+
+    let label, cls, hint = '';
+    if (overall >= 0.8 && !a1b3Weak) {
+      label = 'Empfohlen';
+      cls = 'rec-empfohlen';
+    } else if (overall >= 0.5 && !a1b3Weak) {
+      label = 'Mit Anpassungen empfohlen';
+      cls = 'rec-anpassung';
+    } else if (overall >= 0.5 && a1b3Weak) {
+      label = 'Mit Anpassungen empfohlen';
+      cls = 'rec-anpassung';
+      hint = 'Vor Einsatz: A1 (fachliche Richtigkeit) und/oder B3 (rechtliche Qualität) nachbessern.';
+    } else {
+      label = 'Nicht empfohlen';
+      cls = 'rec-nicht';
+      if (a1b3Weak) hint = 'Insbesondere A1 (fachliche Richtigkeit) und/oder B3 (rechtliche Qualität) sind unzureichend erfüllt.';
+    }
+
+    box.textContent = label;
+    box.classList.add(cls);
+    sub.textContent = hint;
+    box.appendChild(sub);
+  }
+
+  function updateSectionVisual(toggle) {
+    const key = toggle.getAttribute('data-section-toggle');
+    const section = document.querySelector(`.subsection[data-section="${key}"]`);
+    if (section) section.classList.toggle('excluded', !toggle.checked);
+  }
+
+  document.querySelectorAll('#evalForm input[type="checkbox"][data-cat]').forEach(cb => {
+    cb.addEventListener('change', updateChart);
   });
 
-  // per-main average
-  const mainPct = {};
-  MAINCATS.forEach(main => {
-    const subs = main.subs.map(s => subPct[s.id] || 0);
-    const avg = subs.length ? Math.round(subs.reduce((a,b)=>a+b,0) / subs.length) : 0;
-    mainPct[main.id] = avg;
-
-    document.getElementById(`badge-text-${main.id}`).textContent = (avg === 100 ? "✓ Erfüllt" : avg + "%");
-    const badgeEl = document.getElementById(`badge-${main.id}`);
-    badgeEl.classList.toggle("done", avg === 100);
-    const ringEl = badgeEl.querySelector(".ring");
-    if(avg === 100){
-      badgeEl.style.background = "#ffffff";
-      badgeEl.style.color = main.dark;
-      badgeEl.style.borderColor = "#ffffff";
-      if(ringEl) ringEl.style.background = main.main;
-    } else {
-      badgeEl.style.background = "rgba(255,255,255,.16)";
-      badgeEl.style.color = "#ffffff";
-      badgeEl.style.borderColor = "rgba(255,255,255,.5)";
-      if(ringEl) ringEl.style.background = "rgba(255,255,255,.55)";
-    }
-    document.getElementById(`lpct-${main.id}`).textContent = avg + "%";
-    document.getElementById(`lfill-${main.id}`).style.width = avg + "%";
-    main.subs.forEach(s => {
-      const chip = document.getElementById(`chip-${s.id}`);
-      if(chip) chip.textContent = `${s.id}: ${subPct[s.id]||0}%`;
+  document.querySelectorAll('.section-toggle').forEach(toggle => {
+    toggle.addEventListener('change', () => {
+      // Bei radio-Gruppe (C3-Varianten) auch die abgewählte Section optisch aktualisieren
+      if (toggle.type === 'radio') {
+        document.querySelectorAll(`input[name="${toggle.name}"]`).forEach(updateSectionVisual);
+      } else {
+        updateSectionVisual(toggle);
+      }
+      updateChart();
     });
   });
 
-  const overallPct = totalItems ? Math.round((totalChecked / totalItems) * 100) : 0;
-  document.getElementById("progressFill").style.width = overallPct + "%";
-  document.getElementById("progressLabel").textContent = `${totalChecked} / ${totalItems} Kriterien (${overallPct}%)`;
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    document.querySelectorAll('#evalForm input[type="checkbox"][data-cat]').forEach(cb => cb.checked = false);
+    updateChart();
+  });
 
-  renderSpider(MAINCATS.map(m => mainPct[m.id]));
+  document.getElementById('printBtn').addEventListener('click', () => window.print());
 
-  const badge = document.getElementById("verdictBadge");
-  const rec = document.getElementById("recBox");
-  if (totalChecked === 0){
-    badge.textContent = "— noch keine Angaben —";
-    badge.className = "verdict";
-    rec.innerHTML = "Beginnen Sie oben mit dem Ankreuzen der Kriterien — die Empfehlung wird hier automatisch ergänzt.";
-    return;
-  }
-  const values = MAINCATS.map(m => mainPct[m.id]);
-  const avgPct = Math.round(values.reduce((a,b)=>a+b,0) / values.length);
-  const weakest = MAINCATS.map(m => ({ m, pct: mainPct[m.id] })).sort((a,b)=>a.pct-b.pct)[0];
+  // ===== Modal: Erklärung der Bewertungslogik =====
+  const explainModal = document.getElementById('explainModal');
+  function openModal() { explainModal.classList.add('open'); }
+  function closeModal() { explainModal.classList.remove('open'); }
 
-  if (avgPct >= 80){ badge.textContent = "Uneingeschränkt einsetzbar"; badge.className = "verdict high"; }
-  else if (avgPct >= 50){ badge.textContent = "Mit Anpassungen einsetzbar"; badge.className = "verdict mid"; }
-  else { badge.textContent = "Nicht empfohlen"; badge.className = "verdict low"; }
+  document.getElementById('explainBtn').addEventListener('click', openModal);
+  document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+  explainModal.addEventListener('click', (e) => { if (e.target === explainModal) closeModal(); });
+  document.getElementById('modalAnhangLink').addEventListener('click', closeModal);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
 
-  rec.innerHTML = `Durchschnittlicher Erfüllungsgrad über die vier Hauptkategorien: <b>${avgPct}%</b>. ` +
-    `Am wenigsten erfüllt ist aktuell <b>${weakest.m.id} · ${weakest.m.name}</b> (${weakest.pct}%) — ` +
-    `hier lohnt sich vor dem Einsatz eine gezielte Nachbesserung.`;
-}
-
-function resetAll(){
-  if(!confirm("Alle Häkchen wirklich zurücksetzen?")) return;
-  allCheckboxes.forEach(b => { b.checked = false; b.closest(".item").classList.remove("checked"); });
-  updateAll();
-}
-
-updateAll();
+  updateChart();
 </script>
 </body>
 </html>
