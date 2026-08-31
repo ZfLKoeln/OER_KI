@@ -52,6 +52,10 @@
   .recommendation-sub{font-size:.82em;font-weight:normal;margin-top:6px;color:#6a5216;}
   .note-a1b3{font-size:.85em;color:var(--muted);margin-top:14px;}
   .basis-line{font-size:.78em;color:var(--muted);margin-top:20px;padding-top:14px;border-top:1px solid var(--line);}
+  .license-block{display:flex;gap:12px;align-items:flex-start;margin-top:20px;padding-top:14px;border-top:1px solid var(--line);}
+  .license-block img{flex-shrink:0;margin-top:2px;}
+  .license-block .basis-line{margin:0;padding:0;border:none;}
+  .license-block .basis-line a{color:inherit;text-decoration:underline;}
   .explain-link{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--blue);color:var(--blue-dark);font-size:.82em;padding:6px 12px;border-radius:20px;cursor:pointer;margin-top:12px;text-decoration:none;}
   .explain-link:hover{background:#eef6fc;}
 
@@ -273,11 +277,42 @@
 
           <button type="button" id="explainBtn" class="explain-link no-print">ℹ️ Wie wird diese Bewertung berechnet?</button>
 
-          <p class="note-a1b3">Hinweis: Materialien, die bei Kriterien in Block <strong>A1</strong> (fachliche Richtigkeit) oder <strong>B3</strong> (rechtliche Qualität) schwach abschneiden, sollten vor dem Einsatz gezielt nachgebessert werden. Details siehe <a href="#anhang-logik">Anhang: Bewertungslogik</a>.</p>
+          <p class="note-a1b3">Hinweis: Materialien, die bei Kriterien in Block <strong>A1</strong> (fachliche Richtigkeit) oder <strong>B3</strong> (rechtliche Qualität) schwach abschneiden, sollten vor dem Einsatz gezielt nachgebessert werden.</p>
 
-          <p class="basis-line">Grundlage: Kriterienkatalog nach Becker et al. (2024) / Mayrberger & Zawacki-Richter (2018), ergänzt um das OECD/EU-Kompetenzrahmenmodell für KI (2026), das PRÜFE-Framework (B. Geyer), die Methode „Antwort-Autopsie" (L. Spohn) und die KI-Aufgabenkultur (Falck & Flick).</p>
+          <div class="license-block">
+            <a href="https://creativecommons.org/licenses/by-sa/4.0/legalcode.de" target="_blank" rel="noopener" aria-label="CC BY-SA 4.0 Lizenz">
+              <img src="https://licensebuttons.net/l/by-sa/4.0/88x31.png" alt="CC BY-SA 4.0" width="88" height="31">
+            </a>
+            <p class="basis-line">„Bewertung von OER- und KI-gestütztem Material zu BNE" vom <a href="https://zfl.uni-koeln.de/" target="_blank" rel="noopener">ZfL Köln</a> auf Grundlage verschiedenster Quellen und mit KI-Unterstützung erstellt und steht unter der Lizenz <a href="https://creativecommons.org/licenses/by-sa/4.0/legalcode.de" target="_blank" rel="noopener">CC BY-SA 4.0</a>. Bei Weitergabe oder Bearbeitung ist sowohl dieser Lizenzhinweis für die eigene Bearbeitung als auch die Einzelnachweise der verwendeten Quellen zu übernehmen.</p>
+          </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- ============ Quellen ============ -->
+  <div class="page-break">
+    <h2>Quellen</h2>
+    <div class="quellen" style="font-size:.88em;color:#444;">
+      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Becker, V., Schaper, F., Schulte-Buskase, A. & Tibbe, T. (2024): (Qualitäts-)Ansprüche an OER: Zur Entwicklung eines Kriterienkatalogs für OER im Kontext von inklusionsbezogener Lehrkräftebildung. In: <em>MedienPädagogik: Zeitschrift für Theorie und Praxis der Medienbildung.</em> Online verfügbar unter <a href="https://www.researchgate.net" target="_blank" rel="noopener">researchgate.net</a></p>
+
+      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">de Haan, Gerhard (2008): Gestaltungskompetenz als Kompetenzkonzept der Bildung für nachhaltige Entwicklung. In: Bormann, Inka; de Haan, Gerhard (Hrsg.): <em>Kompetenzen der Bildung für nachhaltige Entwicklung. Operationalisierung, Messung, Rahmenbedingungen, Befunde.</em> Wiesbaden: VS Verlag für Sozialwissenschaften, S. 23–44.</p>
+
+      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Falck, J. & Flick, M. (2025): KI-Didaktik: Eine Planungsvorlage zur Aufgabenkultur im KI-Zeitalter. Online verfügbar unter <a href="https://joschafalck.de" target="_blank" rel="noopener">joschafalck.de</a></p>
+
+      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Geyer, B. (2025): Nicht alles glauben, was KI sagt — Das PRÜFE-Framework für kritische KI-Bewertung. Online verfügbar unter <a href="https://barbarageyer.substack.com" target="_blank" rel="noopener">barbarageyer.substack.com</a></p>
+
+      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Klein, A. (2026): KI, OER und OEP — für eine nachhaltige Openness. Learntec-Vortrag. Online verfügbar unter <a href="https://hnd-bw.de" target="_blank" rel="noopener">hnd-bw.de</a></p>
+
+      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Kultusministerkonferenz (KMK) & Bundesministerium für wirtschaftliche Zusammenarbeit und Entwicklung (BMZ) (Hrsg.) (2016): <em>Orientierungsrahmen für den Lernbereich Globale Entwicklung im Rahmen einer Bildung für nachhaltige Entwicklung.</em> 2., aktualisierte und erweiterte Auflage. Bonn: Cornelsen.</p>
+
+      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Mayrberger, K. & Zawacki-Richter, O. (2018): Qualität von OER: Internationale Bestandsaufnahme von Instrumenten zur Qualitätssicherung von Open Educational Resources (OER) — Schritte zu einem deutschen Modell am Beispiel der Hamburg Open Online University. Online verfügbar unter <a href="https://www.researchgate.net" target="_blank" rel="noopener">researchgate.net</a></p>
+
+      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Medienzentrum Hofgeismar / Wolfhagen (o. J.): SAMR-Modell zur Integration von digitalen Technologien im Unterricht. Online verfügbar unter <a href="https://mz-hofgeismar.de/apps/" target="_blank" rel="noopener">mz-hofgeismar.de/apps</a></p>
+
+      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Ministerium für Schule und Bildung des Landes Nordrhein-Westfalen (MSB) (Hrsg.) (2019): <em>Leitlinie Bildung für nachhaltige Entwicklung.</em> Düsseldorf.</p>
+
+      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Spohn, Lucca (2026): Eine KI-Antwort ist kein Text. Online verfügbar unter <a href="https://luccaspohn.substack.com/p/eine-ki-antwort-ist-kein-text" target="_blank" rel="noopener">luccaspohn.substack.com</a></p>
     </div>
   </div>
 
@@ -306,32 +341,6 @@
     </table>
     <p>Kurz gesagt: Der <strong>Gesamtprozentsatz bestimmt die Grundstufe</strong> (80 %-/50 %-Schwelle), während <strong>A1 und B3 als „Veto"</strong> wirken — selbst bei hoher Gesamterfüllung verhindern schwache Werte dort die Bestnote „Empfohlen".</p>
     <p style="color:var(--muted);font-size:.88em;">Sind noch keine Kriterien angekreuzt, erscheint „— noch keine Angaben —". Die Schwellenwerte (80 % / 50 % / 60 %) sind eine Orientierungshilfe und können bei Bedarf angepasst werden.</p>
-  </div>
-
-  <!-- ============ Quellen ============ -->
-  <div class="page-break">
-    <h2>Quellen</h2>
-    <div class="quellen" style="font-size:.88em;color:#444;">
-      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Becker, V., Schaper, F., Schulte-Buskase, A. & Tibbe, T. (2024): (Qualitäts-)Ansprüche an OER: Zur Entwicklung eines Kriterienkatalogs für OER im Kontext von inklusionsbezogener Lehrkräftebildung. In: <em>MedienPädagogik: Zeitschrift für Theorie und Praxis der Medienbildung.</em> Online verfügbar unter <a href="https://www.researchgate.net" target="_blank" rel="noopener">researchgate.net</a></p>
-
-      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">de Haan, Gerhard (2008): Gestaltungskompetenz als Kompetenzkonzept der Bildung für nachhaltige Entwicklung. In: Bormann, Inka; de Haan, Gerhard (Hrsg.): <em>Kompetenzen der Bildung für nachhaltige Entwicklung. Operationalisierung, Messung, Rahmenbedingungen, Befunde.</em> Wiesbaden: VS Verlag für Sozialwissenschaften, S. 23–44.</p>
-
-      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Falck, J. & Flick, M. (2025): KI-Didaktik: Eine Planungsvorlage zur Aufgabenkultur im KI-Zeitalter. Online verfügbar unter <a href="https://joschafalck.de" target="_blank" rel="noopener">joschafalck.de</a></p>
-
-      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Geyer, B. (2025): Nicht alles glauben, was KI sagt — Das PRÜFE-Framework für kritische KI-Bewertung. Online verfügbar unter <a href="https://barbarageyer.substack.com" target="_blank" rel="noopener">barbarageyer.substack.com</a></p>
-
-      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Klein, A. (2026): KI, OER und OEP — für eine nachhaltige Openness. Learntec-Vortrag. Online verfügbar unter <a href="https://hnd-bw.de" target="_blank" rel="noopener">hnd-bw.de</a></p>
-
-      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Kultusministerkonferenz (KMK) & Bundesministerium für wirtschaftliche Zusammenarbeit und Entwicklung (BMZ) (Hrsg.) (2016): <em>Orientierungsrahmen für den Lernbereich Globale Entwicklung im Rahmen einer Bildung für nachhaltige Entwicklung.</em> 2., aktualisierte und erweiterte Auflage. Bonn: Cornelsen.</p>
-
-      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Mayrberger, K. & Zawacki-Richter, O. (2018): Qualität von OER: Internationale Bestandsaufnahme von Instrumenten zur Qualitätssicherung von Open Educational Resources (OER) — Schritte zu einem deutschen Modell am Beispiel der Hamburg Open Online University. Online verfügbar unter <a href="https://www.researchgate.net" target="_blank" rel="noopener">researchgate.net</a></p>
-
-      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Medienzentrum Hofgeismar / Wolfhagen (o. J.): SAMR-Modell zur Integration von digitalen Technologien im Unterricht. Online verfügbar unter <a href="https://mz-hofgeismar.de/apps/" target="_blank" rel="noopener">mz-hofgeismar.de/apps</a></p>
-
-      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Ministerium für Schule und Bildung des Landes Nordrhein-Westfalen (MSB) (Hrsg.) (2019): <em>Leitlinie Bildung für nachhaltige Entwicklung.</em> Düsseldorf.</p>
-
-      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Spohn, Lucca (2026): Eine KI-Antwort ist kein Text. Online verfügbar unter <a href="https://luccaspohn.substack.com/p/eine-ki-antwort-ist-kein-text" target="_blank" rel="noopener">luccaspohn.substack.com</a></p>
-    </div>
   </div>
 
 </div>
