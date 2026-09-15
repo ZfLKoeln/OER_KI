@@ -1,3 +1,5 @@
+
+Index · HTML
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -29,13 +31,17 @@
   .criterion label{cursor:pointer;font-size:.95em;}
   .criterion b{color:var(--ink);}
   .criterion small{display:block;color:#5d6d7e;font-weight:normal;}
+  .level-item{border-radius:6px;padding:6px 8px;margin:6px 0;transition:background .2s;}
+  .level-item.level-included{background:#eafaf0;}
+  .level-item.level-included label b{color:var(--green);}
+  .level-item.level-included::after{content:"✓ automatisch mit erreicht";font-size:.72em;color:var(--green);font-weight:600;white-space:nowrap;align-self:center;margin-left:auto;padding-left:10px;}
   .note-box{background:#fff8e1;border-left:4px solid #f39c12;padding:12px 16px;border-radius:4px;font-size:.9em;margin:20px 0;}
   .variant-group{border:1px dashed #b7d4e8;border-radius:8px;padding:4px 4px 14px 4px;margin:18px 0 30px 0;background:#f6fbfe;}
   .variant-group>.variant-hint{font-size:.85em;color:var(--blue-dark);padding:10px 16px 0 16px;}
   .variant-group .subsection{border:1px solid var(--line);background:#fff;}
   .variant-header{flex-direction:column;align-items:flex-start;gap:8px;}
   .variant-header .toggle-label{font-size:.88em;}
-
+ 
   /* ===== Ergebnisübersicht ===== */
   .results-panel{background:#f6f9fb;border:1px solid var(--line);border-radius:10px;padding:24px 28px;margin-top:18px;}
   .results-grid{display:flex;flex-wrap:wrap;gap:30px;align-items:flex-start;}
@@ -58,7 +64,7 @@
   .license-block .basis-line a{color:inherit;text-decoration:underline;}
   .explain-link{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--blue);color:var(--blue-dark);font-size:.82em;padding:6px 12px;border-radius:20px;cursor:pointer;margin-top:12px;text-decoration:none;}
   .explain-link:hover{background:#eef6fc;}
-
+ 
   /* ===== Modal ===== */
   .modal-overlay{position:fixed;inset:0;background:rgba(44,62,80,.55);display:none;align-items:center;justify-content:center;z-index:100;padding:20px;}
   .modal-overlay.open{display:flex;}
@@ -78,6 +84,15 @@
   .reset-bar button{background:var(--blue);color:#fff;border:none;padding:8px 16px;border-radius:5px;cursor:pointer;font-size:.85em;margin-left:8px;}
   .reset-bar button:hover{background:var(--blue-dark);}
   .page-break{page-break-before:always;margin-top:60px;border-top:2px dashed #ccc;padding-top:30px;}
+  .lernziel-anchor{background:#f3f9f4;border:1px solid #c8e6cf;border-left:4px solid var(--green);border-radius:8px;padding:20px 24px;margin:24px 0 34px;}
+  .lernziel-anchor h2{margin:0 0 4px;border-bottom:none;padding-bottom:0;color:#1e7e42;}
+  .lernziel-anchor .subsection-intro{font-style:normal;color:#3d5a46;}
+  .lernziel-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px;}
+  .lernziel-field{display:flex;flex-direction:column;gap:6px;font-size:.85em;color:var(--ink);font-weight:600;}
+  .lernziel-field textarea{font-family:inherit;font-size:.95em;font-weight:normal;padding:8px 10px;border:1px solid var(--line);border-radius:6px;resize:vertical;color:#333;background:#fff;}
+  .lernziel-note{font-size:.78em;color:#5c7a64;margin-top:12px;}
+  @media (max-width:640px){.lernziel-grid{grid-template-columns:1fr;}}
+  @media print{.lernziel-field textarea{border:1px solid #999;min-height:50px;}}
   @media print{
     .no-print{display:none;}
     .reset-bar{display:none;}
@@ -88,12 +103,12 @@
 </head>
 <body>
 <div class="container">
-
+ 
   <div class="reset-bar no-print">
     <button id="printBtn" type="button">Drucken / PDF</button>
     <button id="resetBtn" type="button">Zurücksetzen</button>
   </div>
-
+ 
   <h1>Kriterienkatalog: Bewertung von OER- und KI-gestütztem Material zu BNE</h1>
   <div class="intro">
     Checkliste zur systematischen Bewertung von Bildungsmaterial zur Bildung für nachhaltige Entwicklung (BNE), das als
@@ -101,14 +116,42 @@
     und Orientierungshilfe. <strong>Es müssen nicht alle Kriterien erfüllt sein.</strong> Kreuzen Sie die zutreffenden
     Kriterien an — die Analysespinne am Ende aktualisiert sich automatisch. Nicht jeder Bereich ist für jedes Material
     relevant: Mit dem Häkchen „Bereich einbeziehen" im Kopf jedes Abschnitts können Sie einzelne Unterkategorien
-    (A1, B3 etc.) gezielt aus der Bewertung und der Analysespinne herausnehmen.
+    (A1, B3 etc.) gezielt aus der Bewertung und der Analysespinne herausnehmen. Starten Sie idealerweise mit dem
+    <strong>Lernziel-Anker</strong> direkt unterhalb — er ordnet KI als Basistechnologie, das Material als Hilfsmittel
+    und das Lernziel als eigentlichen Zweck ein, bevor Sie in die Detailkriterien einsteigen.
   </div>
-
+ 
+  <div class="lernziel-anchor">
+    <h2>🎯 Lernziel-Anker: Wozu KI an dieser Stelle?</h2>
+    <p class="subsection-intro">In dieser Checkliste ist KI die <strong>Basistechnologie</strong>, das Material das <strong>Hilfsmittel</strong> — beides steht im Dienst eines <strong>Lernziels</strong>. Bevor Sie einzelne Kriterien prüfen, lohnt sich der Blick auf das große Ganze: Welche Rolle spielt KI konkret dafür, dass dieses Lernziel erreicht wird? Das schafft Orientierung für alle folgenden Abschnitte — besonders A2.1/A2.2 (Aufgabenstellung) und C1–C3 (KI-Integration).</p>
+    <div class="lernziel-grid">
+      <label class="lernziel-field">
+        <span>Lernziel der Stunde/Reihe</span>
+        <textarea id="lz-lernziel" rows="2" placeholder="z. B.: Die SuS können Argumente für und gegen eine Position abwägen und begründet Stellung beziehen."></textarea>
+      </label>
+      <label class="lernziel-field">
+        <span>Welche Rolle spielt KI, damit dieses Lernziel erreicht wird?</span>
+        <textarea id="lz-rolle" rows="2" placeholder="z. B.: KI liefert Gegenpositionen als Diskussionsgrundlage, die SuS bewerten und ordnen sie ein."></textarea>
+      </label>
+    </div>
+    <div class="lernziel-grid">
+      <label class="lernziel-field">
+        <span>Das gelingt mit dieser Basistechnologie besonders gut …</span>
+        <textarea id="lz-gelingt" rows="2"></textarea>
+      </label>
+      <label class="lernziel-field">
+        <span>Das könnte ich auch ohne KI erreichen …</span>
+        <textarea id="lz-ohne" rows="2"></textarea>
+      </label>
+    </div>
+    <p class="lernziel-note">Diese Angaben werden nicht gespeichert oder in die Bewertung eingerechnet — sie dienen als gedankliche Klammer für die Checkliste und lassen sich z. B. direkt in die Reflexion eines Unterrichtsentwurfs (UB) übernehmen: <em>„X gelingt mit dieser Basistechnologie, Y könnte ich auch ohne sie erreichen …"</em></p>
+  </div>
+ 
   <form id="evalForm">
-
+ 
     <!-- ============ A. Pädagogisch-didaktische Dimension ============ -->
     <h2>A. Pädagogisch-didaktische Dimension</h2>
-
+ 
     <div class="subsection" data-section="A1">
       <div class="subsection-header">
         <h3>A1. Inhaltliche Dimension</h3>
@@ -117,24 +160,28 @@
       <div class="criterion"><input type="checkbox" data-cat="A1" id="c1"><label for="c1"><b>Zielgruppenorientierung und Anwendungsbereich:</b> <small>Zielgruppe (Alter, Vorwissen, Kontext) und Einsatzbereich (Fach, Schulform, Setting) sind klar definiert und das Material ist darauf abgestimmt.</small></label></div>
       <div class="criterion"><input type="checkbox" data-cat="A1" id="c2"><label for="c2"><b>Fachliche Richtigkeit und Fundierung:</b> <small>Inhalte sind fachlich korrekt, aktuell und durch Quellen bzw. Fachpersonen belegt; bei KI-generierten Inhalten ist eine fachliche Prüfung erfolgt (siehe PRÜFE-Check, Abschnitt C3).</small></label></div>
       <div class="criterion"><input type="checkbox" data-cat="A1" id="c3"><label for="c3"><b>Vollständigkeit und Kohärenz:</b> <small>Das Thema wird in sich schlüssig und ohne inhaltliche Lücken oder Brüche behandelt.</small></label></div>
-      <div class="criterion"><input type="checkbox" data-cat="A1" id="c4"><label for="c4"><b>Inhaltliche Verwendbarkeit:</b> <small>Inhalte sind so aufbereitet, dass sie direkt oder mit geringem Aufwand im Unterricht/in der Bildungsarbeit nutzbar sind.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="A1" id="c4"><label for="c4"><b>Inhaltliche Verwendbarkeit und Sprachsensibilität:</b> <small>Inhalte sind so aufbereitet, dass sie direkt oder mit geringem Aufwand im Unterricht/in der Bildungsarbeit nutzbar sind; die Sprache ist dabei diskriminierungsfrei, inklusiv und vermeidet unnötige Fachbegriffe oder stereotype Darstellungen.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="A1" id="c69"><label for="c69"><b>Sinnhaftigkeit der Inhalte und Aufgaben:</b> <small>Verständnis und Relevanz, die die Lerninhalte für das Individuum und die Gesellschaft haben, sind erkennbar und werden vermittelt.</small></label></div>
       <div class="criterion"><input type="checkbox" data-cat="A1" id="c5"><label for="c5"><b>Lehrplan- und Bildungsstandards:</b> <small>Es besteht ein erkennbarer Bezug zu curricularen Vorgaben und Bildungsstandards (z. B. BNE-Orientierungsrahmen, KMK-Vorgaben).</small></label></div>
     </div>
-
+ 
     <div class="subsection" data-section="A2">
       <div class="subsection-header">
         <h3>A2. Didaktische Dimension</h3>
         <label class="toggle-label"><input type="checkbox" class="section-toggle" data-section-toggle="A2" data-group="A" checked> Bereich einbeziehen</label>
       </div>
-      <div class="criterion"><input type="checkbox" data-cat="A2" id="c6"><label for="c6"><b>Motivation/Vielfalt der Lernzugänge:</b> <small>Unterschiedliche Zugänge (visuell, handelnd, diskursiv, forschend) werden angesprochen.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="A2" id="c6"><label for="c6"><b>Motivation/Vielfalt der Zugangswege:</b> <small>Unterschiedliche Zugänge und Repräsentationsformen (visuell, handelnd, diskursiv, forschend; Text, Bild, Audio, Video, taktil) sprechen verschiedene Lerntypen an.</small></label></div>
       <div class="criterion"><input type="checkbox" data-cat="A2" id="c7"><label for="c7"><b>Anwendung und Transfer:</b> <small>Es besteht die Möglichkeit zur Übertragung auf eigene Praxis bzw. reale Situationen.</small></label></div>
-      <div class="criterion"><input type="checkbox" data-cat="A2" id="c8"><label for="c8"><b>Differenzierung und Support:</b> <small>Angebote in unterschiedlichen Niveaustufen, Erklärhilfen und Unterstützungsangebote sind vorhanden.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="A2" id="c63"><label for="c63"><b>Wahlmöglichkeiten und abgestufte Anforderungsniveaus:</b> <small>Lernende können zwischen Themen, Methoden oder Sozialformen (Einzel-, Partner-, Gruppenarbeit) wählen; zusätzlich gibt es Basis-, Erweiterungs- und Vertiefungsangebote bzw. gestaffelte Hilfen für unterschiedliche und schnellere/stärkere Lernende.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="A2" id="c62"><label for="c62"><b>Hilfestellungen und Scaffolding:</b> <small>Inhaltliche wie sprachliche Unterstützung ist eingebaut (Checklisten, Advance Organizer) und kann zusätzlich bei Bedarf gezielt abgerufen werden (z. B. Tipps, Lösungshinweise).</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="A2" id="c60"><label for="c60"><b>Sprachniveau-Differenzierung:</b> <small>Es existieren Fassungen oder Hilfen für unterschiedliche Sprachniveaus — von Einfacher/Leichter Sprache über die Alltags- bis zur Fachsprache (z. B. Wortspeicher, Glossar).</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="A2" id="c61"><label for="c61"><b>Flexibles Lerntempo:</b> <small>Material ist nicht an starre Zeitvorgaben gebunden, sondern erlaubt schnelleres oder langsameres Bearbeiten.</small></label></div>
       <div class="criterion"><input type="checkbox" data-cat="A2" id="c9"><label for="c9"><b>Kollaboration und Interaktion:</b> <small>Das Material ermöglicht Zusammenarbeit bzw. Austausch unter Lernenden.</small></label></div>
       <div class="criterion"><input type="checkbox" data-cat="A2" id="c10"><label for="c10"><b>Aufgabenstellung/Assessment und Feedback:</b> <small>Aufgaben sind klar formuliert, es gibt Möglichkeiten zur Selbst- bzw. Fremdüberprüfung und Feedback-Formate.</small></label></div>
     </div>
-
+ 
     <p class="subsection-intro" style="margin:0 4px;">Bereich A2.1 „Aufgabenstellung im KI-Zeitalter" liegt in zwei Varianten vor — bitte <strong>entweder</strong> die KI-Aufgabenkultur nach Falck/Flick <strong>oder</strong> das Polmodell nach Barbara Geyer für die Bewertung einbeziehen.</p>
-
+ 
     <div class="variant-group">
       <div class="subsection" data-section="A2_1">
         <div class="subsection-header variant-header">
@@ -148,7 +195,7 @@
         <div class="criterion"><input type="checkbox" data-cat="A2_1" id="c14"><label for="c14"><b>KI-limitierend:</b> <small>An geeigneten Stellen wird bewusst auf KI verzichtet, um Kompetenzen (z. B. eigenständiges Argumentieren) sichtbar zu sichern.</small></label></div>
         <div class="criterion"><input type="checkbox" data-cat="A2_1" id="c15"><label for="c15"><b>Begründete Auswahl erkennbar:</b> <small>Es ist nachvollziehbar, warum diese Aufgabenart und dieser KI-Einsatzgrad für das Lernziel gewählt wurden.</small></label></div>
       </div>
-
+ 
       <div class="subsection excluded" data-section="A2_2">
         <div class="subsection-header variant-header">
           <h3>A2.2 Variante (2) — Das Polmodell</h3>
@@ -163,20 +210,25 @@
         <div class="criterion"><input type="checkbox" data-cat="A2_2" id="c16b"><label for="c16b"><b>Gestaltung statt Kontrolle:</b> <small>Der Fokus liegt auf der bewussten Gestaltung der Aufgabenstellung, nicht auf dem nachträglichen Versuch, KI-Nutzung zu erkennen oder zu verbieten.</small></label></div>
       </div>
     </div>
-
+ 
     <!-- ============ B. Technische Dimension ============ -->
     <h2>B. Technische Dimension</h2>
-
+ 
     <div class="subsection" data-section="B1">
       <div class="subsection-header">
         <h3>B1. Zugänglichkeit</h3>
         <label class="toggle-label"><input type="checkbox" class="section-toggle" data-section-toggle="B1" data-group="B" checked> Bereich einbeziehen</label>
       </div>
-      <div class="criterion"><input type="checkbox" data-cat="B1" id="c16"><label for="c16"><b>Barrierefreiheit:</b> <small>Material ist für Menschen mit unterschiedlichen Voraussetzungen (Sehen, Hören, Sprache, technische Ausstattung) zugänglich.</small></label></div>
-      <div class="criterion"><input type="checkbox" data-cat="B1" id="c17"><label for="c17"><b>Technische Wiederverwendbarkeit/Anpassbarkeit:</b> <small>Material liegt in bearbeitbaren Formaten vor und kann angepasst werden.</small></label></div>
-      <div class="criterion"><input type="checkbox" data-cat="B1" id="c18"><label for="c18"><b>Zuverlässigkeit und Kompatibilität (offene Dateiformate):</b> <small>Es werden offene, plattformunabhängige Dateiformate verwendet; Material funktioniert zuverlässig.</small></label></div>
+      <p class="subsection-intro">Barrierefreiheit wird anhand konkret prüfbarer Indikatoren erfasst (in Anlehnung an WCAG 2.2, Universal Design for Learning und die Erasmus+-Guidelines „Ein digitales Schulbuch für alle", DEM-Projekt 2025).</p>
+      <div class="criterion"><input type="checkbox" data-cat="B1" id="c51"><label for="c51"><b>Alternativtexte:</b> <small>Bilder, Grafiken und andere visuelle Inhalte sind mit aussagekräftigen Alternativtexten versehen; bei zentralen Visualisierungen ist geprüft, ob die Aufgabe auch mit Alternativtext lösbar ist oder eine eigene Alternativaufgabe nötig wird.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="B1" id="c52"><label for="c52"><b>Kontraste und Farbnutzung:</b> <small>Text- und Hintergrundfarben erfüllen die WCAG-Kontrastanforderungen (mind. AA-Niveau); Inhalte, die über Farbe vermittelt werden, sind zusätzlich durch Form, Muster oder Beschriftung erkennbar (wichtig bei Farbfehlsichtigkeit).</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="B1" id="c66"><label for="c66"><b>Tastaturbedienbarkeit:</b> <small>Alle interaktiven Elemente sind vollständig per Tastatur erreichbar und bedienbar, mit sichtbarem Fokus und ohne „Tabfallen".</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="B1" id="c53"><label for="c53"><b>Untertitel, Transkripte und Audiodeskription:</b> <small>Audio- und Videoinhalte verfügen über Untertitel, ein Transkript und bei Bedarf eine Audiodeskription visueller Inhalte.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="B1" id="c54"><label for="c54"><b>Screenreader-Tauglichkeit:</b> <small>Struktur (Überschriften, Formularfelder, Reihenfolge) ist so aufgebaut, dass Screenreader die Inhalte korrekt vorlesen können.</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="B1" id="c57"><label for="c57"><b>Mehrsprachige Ressourcen:</b> <small>Zentrale Inhalte sind in weiteren Sprachen verfügbar oder leicht übersetzbar (z. B. mehrsprachige Begriffserklärungen).</small></label></div>
+      <div class="criterion"><input type="checkbox" data-cat="B1" id="c17"><label for="c17"><b>Technische Wiederverwendbarkeit und Kompatibilität:</b> <small>Material liegt in offenen, bearbeitbaren und plattformunabhängigen Formaten vor, kann angepasst werden und funktioniert zuverlässig.</small></label></div>
     </div>
-
+ 
     <div class="subsection" data-section="B2">
       <div class="subsection-header">
         <h3>B2. Usability</h3>
@@ -186,7 +238,7 @@
       <div class="criterion"><input type="checkbox" data-cat="B2" id="c20"><label for="c20"><b>Design und Lesbarkeit:</b> <small>Layout, Schriftgröße und Kontraste unterstützen die Lesbarkeit.</small></label></div>
       <div class="criterion"><input type="checkbox" data-cat="B2" id="c21"><label for="c21"><b>Interaktivität:</b> <small>Interaktive Elemente funktionieren zuverlässig und unterstützen das Lernen.</small></label></div>
     </div>
-
+ 
     <div class="subsection" data-section="B3">
       <div class="subsection-header">
         <h3>B3. Rechtliche Qualität</h3>
@@ -198,36 +250,37 @@
       <div class="criterion"><input type="checkbox" data-cat="B3" id="c25"><label for="c25"><b>Kenntlichmachung urheberrechtlicher Einschränkungen:</b> <small>Einschränkungen, die sich z. B. aus den Nutzungsbedingungen eingesetzter KI-Tools ergeben, sind kenntlich gemacht.</small></label></div>
       <div class="criterion"><input type="checkbox" data-cat="B3" id="c26"><label for="c26"><b>KI-Einsatz ist transparent gekennzeichnet:</b> <small>Es ist erkennbar, ob, mit welchem Tool und in welchem Umfang KI bei der Erstellung beigetragen hat, sowie der Grad menschlicher Nachbearbeitung (vollständig KI-generiert / KI-unterstützt / KI-geprüft).</small></label></div>
     </div>
-
+ 
     <!-- ============ C. KI-Integration ============ -->
     <h2>C. KI-Integration <span style="font-size:.6em;font-weight:normal;color:var(--muted);">(wenn vorhanden und kenntlich gemacht)</span></h2>
-
+ 
     <div class="subsection" data-section="C1">
       <div class="subsection-header">
         <h3>C1. Geförderte KI-Kompetenzen</h3>
         <label class="toggle-label"><input type="checkbox" class="section-toggle" data-section-toggle="C1" data-group="C" checked> Bereich einbeziehen</label>
       </div>
-      <p class="subsection-intro">Prüft, ob und welche KI-Kompetenzen bei den Lernenden durch das Material aufgebaut werden — unabhängig davon, ob KI im Material selbst zum Einsatz kommt. Grundlage ist das gemeinsame KI-Kompetenzrahmenmodell von OECD und Europäischer Kommission für die schulische Bildung („Empowering Learners for the Age of AI", 2026), das vier aufeinander aufbauende Domänen unterscheidet.</p>
+      <p class="subsection-intro">Prüft, ob und welche KI-Kompetenzen bei den Lernenden durch das Material aufgebaut werden — unabhängig davon, ob KI im Material selbst zum Einsatz kommt. Grundlage ist das gemeinsame KI-Kompetenzrahmenmodell von OECD und Europäischer Kommission für die schulische Bildung („Empowering Learners for the Age of AI", 2026), das vier aufeinander aufbauende Domänen unterscheidet. <em>Bezug zum Lernziel-Anker oben:</em> Kompetenzaufbau ist hier Mittel zum Zweck — geprüft wird, ob er auf das eingangs formulierte Lernziel einzahlt, nicht als Selbstzweck.</p>
       <div class="criterion"><input type="checkbox" data-cat="C1" id="c27"><label for="c27"><b>Mit KI bewusst umgehen:</b> <small>Material befähigt dazu, sich kritisch und verantwortungsvoll mit einer von KI geprägten Welt auseinanderzusetzen.</small></label></div>
       <div class="criterion"><input type="checkbox" data-cat="C1" id="c28"><label for="c28"><b>KI kreativ anwenden:</b> <small>Das Material regt dazu an, KI als kreativen Partner zu nutzen und dabei das selbstbestimmte menschliche Handeln zu bewahren.</small></label></div>
       <div class="criterion"><input type="checkbox" data-cat="C1" id="c29"><label for="c29"><b>KI gezielt einsetzen:</b> <small>Das Material motiviert die Haltung, Arbeit bewusst zwischen Menschen und KI-Systemen aufzuteilen und den KI-Einsatz gezielt zu steuern.</small></label></div>
       <div class="criterion"><input type="checkbox" data-cat="C1" id="c30"><label for="c30"><b>KI aktiv mitgestalten:</b> <small>Das Material regt dazu an, über die bloße Nutzung bestehender KI-Systeme hinauszugehen und die Funktionsweise dieser Systeme aktiv zu reflektieren und mitzugestalten.</small></label></div>
     </div>
-
+ 
     <div class="subsection" data-section="C2">
       <div class="subsection-header">
         <h3>C2. Niveau der Integration digitaler Technologien</h3>
         <label class="toggle-label"><input type="checkbox" class="section-toggle" data-section-toggle="C2" data-group="C" checked> Bereich einbeziehen</label>
       </div>
-      <p class="subsection-intro">Mit dem SAMR-Modell nach Ruben Puentedura (2006, Übersetzung Ekkehardt Brüggemann) lässt sich die Integrationstiefe von digitalen Technologien im didaktischen Kontext beurteilen. <strong>Wichtig:</strong> Wenn R, M oder A angekreuzt werden, immer auch alle „niedrigeren" Kategorien mitankreuzen.</p>
-      <div class="criterion"><input type="checkbox" data-cat="C2" id="c31"><label for="c31"><b>S — Substitution, Ersatz:</b> <small>Technik ist direkter Ersatz für Arbeitsmittel ohne funktionale Änderung (z. B. Lesen von Texten auf digitalen Endgeräten).</small></label></div>
-      <div class="criterion"><input type="checkbox" data-cat="C2" id="c32"><label for="c32"><b>A — Augmentation, Erweiterung:</b> <small>Technik ist direkter Ersatz für Arbeitsmittel, mit funktionaler Verbesserung (z. B. Online-Recherche statt Lexika).</small></label></div>
-      <div class="criterion"><input type="checkbox" data-cat="C2" id="c33"><label for="c33"><b>M — Modification, Änderung:</b> <small>Technik ermöglicht beachtliche Neugestaltung von Aufgaben (nur mithilfe digitaler Technik bearbeitbar, z. B. Tabellenkalkulation).</small></label></div>
-      <div class="criterion"><input type="checkbox" data-cat="C2" id="c34"><label for="c34"><b>R — Redefinition, Neubelegung:</b> <small>Technik ermöglicht das Erzeugen neuartiger Aufgaben, die zuvor unvorstellbar waren (z. B. Erstellung digitaler Endprodukte, Aufbereitung schwer verständlicher Inhalte).</small></label></div>
+      <p class="subsection-intro">Mit dem SAMR-Modell nach Ruben Puentedura (2006, Übersetzung Ekkehardt Brüggemann) lässt sich die Integrationstiefe von digitalen Technologien im didaktischen Kontext beurteilen. Wählen Sie die <strong>höchste erreichte Stufe</strong> — alle niedrigeren Stufen werden automatisch als erreicht mitgezählt (grün markiert).</p>
+      <div class="criterion level-item" data-level="1"><input type="radio" name="c2level" data-cat="C2" data-level="1" id="c31"><label for="c31"><b>S — Substitution, Ersatz:</b> <small>Technik ist direkter Ersatz für Arbeitsmittel ohne funktionale Änderung (z. B. Lesen von Texten auf digitalen Endgeräten).</small></label></div>
+      <div class="criterion level-item" data-level="2"><input type="radio" name="c2level" data-cat="C2" data-level="2" id="c32"><label for="c32"><b>A — Augmentation, Erweiterung:</b> <small>Technik ist direkter Ersatz für Arbeitsmittel, mit funktionaler Verbesserung (z. B. Online-Recherche statt Lexika).</small></label></div>
+      <div class="criterion level-item" data-level="3"><input type="radio" name="c2level" data-cat="C2" data-level="3" id="c33"><label for="c33"><b>M — Modification, Änderung:</b> <small>Technik ermöglicht beachtliche Neugestaltung von Aufgaben (nur mithilfe digitaler Technik bearbeitbar, z. B. Tabellenkalkulation).</small></label></div>
+      <div class="criterion level-item" data-level="4"><input type="radio" name="c2level" data-cat="C2" data-level="4" id="c34"><label for="c34"><b>R — Redefinition, Neubelegung:</b> <small>Technik ermöglicht das Erzeugen neuartiger Aufgaben, die zuvor unvorstellbar waren (z. B. Erstellung digitaler Endprodukte, Aufbereitung schwer verständlicher Inhalte).</small></label></div>
+      <p style="font-size:.78em;color:var(--muted);margin:10px 0 0;">Noch keine Stufe ausgewählt? Dann zählt C2 als 0 % — das ist unproblematisch, wenn digitale Technologien im Material keine Rolle spielen (dann ggf. „Bereich einbeziehen" oben deaktivieren).</p>
     </div>
-
+ 
     <p class="subsection-intro" style="margin:0 4px;">Bereich C3 „Kritische Prüfung KI-generierter Inhalte" liegt in zwei Varianten vor — bitte <strong>entweder</strong> das PRÜFE-Framework <strong>oder</strong> die Antwort-Autopsie für die Bewertung einbeziehen.</p>
-
+ 
     <div class="variant-group">
       <div class="subsection" data-section="C3a">
         <div class="subsection-header variant-header">
@@ -241,7 +294,7 @@
         <div class="criterion"><input type="checkbox" data-cat="C3a" id="c38"><label for="c38"><b>F — Falsifizieren:</b> <small>Es wurde aktiv nach Gegenbeweisen/Gegenpositionen gesucht (nicht nur Bestätigung gesammelt).</small></label></div>
         <div class="criterion"><input type="checkbox" data-cat="C3a" id="c39"><label for="c39"><b>E — Entscheiden:</b> <small>Es liegt eine dokumentierte, begründete Entscheidung vor (übernommen/angepasst/abgelehnt), idealerweise gegengeprüft durch eine zweite Person.</small></label></div>
       </div>
-
+ 
       <div class="subsection excluded" data-section="C3b">
         <div class="subsection-header variant-header">
           <h3>C3. Variante (2) — Kritische Prüfung KI-generierter Inhalte (Antwort-Autopsie)</h3>
@@ -254,7 +307,7 @@
         <div class="criterion"><input type="checkbox" data-cat="C3b" id="c43"><label for="c43"><b>Lücken:</b> <small>Es fehlt etwas, wichtige Informationen oder Perspektiven sind nicht vorhanden.</small></label></div>
       </div>
     </div>
-
+ 
     <!-- ============ D. BNE-fachliche Kriterien ============ -->
     <h2>D. BNE-fachliche Kriterien</h2>
     <div class="subsection" data-section="D">
@@ -272,12 +325,12 @@
       <div class="criterion"><input type="checkbox" data-cat="D" id="c50"><label for="c50"><b>Ökologischer Fußabdruck der KI-Nutzung:</b> <small>Ressourcen-/Energieverbrauch generativer KI wird, wo passend, als Teil des BNE-Themas mitgedacht bzw. thematisiert.</small></label></div>
     </div>
   </form>
-
+ 
   <!-- ============ Ergebnisübersicht ============ -->
   <div class="page-break">
     <h2>Ergebnisübersicht — Analysespinne</h2>
-    <p style="font-size:.9em;color:var(--muted);">Jede Achse zeigt den Erfüllungsgrad einer Hauptkategorie (A–D), gemittelt über die einbezogenen Unterkategorien. Ausgeschlossene Unterkategorien fließen nicht ein.</p>
-
+    <p style="font-size:.9em;color:var(--muted);">Jede Achse zeigt den Erfüllungsgrad einer Hauptkategorie (A–D), gemittelt über die einbezogenen Unterkategorien, sowie zusätzlich als fünfte Achse die Ausfüllquote des Lernziel-Ankers oben. Ausgeschlossene Unterkategorien fließen nicht ein; der Lernziel-Anker selbst wird nicht in die Empfehlung eingerechnet.</p>
+ 
     <div class="results-panel">
       <div class="results-grid">
         <div id="chart-container">
@@ -287,16 +340,16 @@
         <div class="results-summary">
           <div class="counter"><span id="checkedCount">0</span> / <span id="totalCount">0</span> Kriterien</div>
           <div class="counter-label">erfüllt (bezogen auf die einbezogenen Bereiche)</div>
-
+ 
           <div id="recommendationBox" class="recommendation-box">
             — noch keine Angaben —
             <div id="recommendationSub" class="recommendation-sub"></div>
           </div>
-
+ 
           <button type="button" id="explainBtn" class="explain-link no-print">ℹ️ Wie wird diese Bewertung berechnet?</button>
-
+ 
           <p class="note-a1b3">Hinweis: Materialien, die bei Kriterien in Block <strong>A1</strong> (fachliche Richtigkeit) oder <strong>B3</strong> (rechtliche Qualität) schwach abschneiden, sollten vor dem Einsatz gezielt nachgebessert werden.</p>
-
+ 
           <div class="license-block">
             <a href="https://creativecommons.org/licenses/by-sa/4.0/legalcode.de" target="_blank" rel="noopener" aria-label="CC BY-SA 4.0 Lizenz">
               <img src="https://licensebuttons.net/l/by-sa/4.0/88x31.png" alt="CC BY-SA 4.0" width="88" height="31">
@@ -307,50 +360,52 @@
       </div>
     </div>
   </div>
-
+ 
   <!-- ============ Quellen ============ -->
   <div class="page-break">
     <h2>Quellen</h2>
     <div class="quellen" style="font-size:.88em;color:#444;">
       <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Becker, V., Schaper, F., Schulte-Buskase, A. & Tibbe, T. (2024): (Qualitäts-)Ansprüche an OER: Zur Entwicklung eines Kriterienkatalogs für OER im Kontext von inklusionsbezogener Lehrkräftebildung. In: <em>MedienPädagogik: Zeitschrift für Theorie und Praxis der Medienbildung.</em> Online verfügbar unter <a href="https://www.researchgate.net" target="_blank" rel="noopener">researchgate.net</a></p>
-
+ 
+      <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Brnic, M., Degenhardt, S., Edelsbrunner, S., Erdel, T., Greefrath, G., Lathan, H., Macchia, V., Mönter, L., Kargl, B., Schütt, M.-L., Schön, S., Torri, S., Wetzel, M. & Ebner, M. (2025): <em>Ein digitales Schulbuch für alle: Barrierefrei und interaktiv von der Idee bis zur Nutzung.</em> DEM (Digital Education Material) Guidelines, Erasmus+-Projekt. CC BY 4.0. DOI: <a href="https://doi.org/10.5281/zenodo.18301620" target="_blank" rel="noopener">10.5281/zenodo.18301620</a></p>
+ 
       <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">de Haan, Gerhard (2008): Gestaltungskompetenz als Kompetenzkonzept der Bildung für nachhaltige Entwicklung. In: Bormann, Inka; de Haan, Gerhard (Hrsg.): <em>Kompetenzen der Bildung für nachhaltige Entwicklung. Operationalisierung, Messung, Rahmenbedingungen, Befunde.</em> Wiesbaden: VS Verlag für Sozialwissenschaften, S. 23–44.</p>
-
+ 
       <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Falck, J. & Flick, M. (2025): KI-Didaktik: Eine Planungsvorlage zur Aufgabenkultur im KI-Zeitalter. Online verfügbar unter <a href="https://joschafalck.de" target="_blank" rel="noopener">joschafalck.de</a></p>
-
+ 
       <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Geyer, B. (2025): Nicht alles glauben, was KI sagt — Das PRÜFE-Framework für kritische KI-Bewertung. Online verfügbar unter <a href="https://barbarageyer.substack.com" target="_blank" rel="noopener">barbarageyer.substack.com</a></p>
-
+ 
       <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Geyer, B. (2026): Das Polmodell — Welche Aufgabenstellungen in Zeiten von KI noch funktionieren. Online verfügbar unter <a href="https://barbarageyer.substack.com/p/das-polmodell" target="_blank" rel="noopener">barbarageyer.substack.com</a></p>
-
+ 
       <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Klein, A. (2026): KI, OER und OEP — für eine nachhaltige Openness. Learntec-Vortrag. Online verfügbar unter <a href="https://hnd-bw.de" target="_blank" rel="noopener">hnd-bw.de</a></p>
-
+ 
       <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Kultusministerkonferenz (KMK) & Bundesministerium für wirtschaftliche Zusammenarbeit und Entwicklung (BMZ) (Hrsg.) (2016): <em>Orientierungsrahmen für den Lernbereich Globale Entwicklung im Rahmen einer Bildung für nachhaltige Entwicklung.</em> 2., aktualisierte und erweiterte Auflage. Bonn: Cornelsen.</p>
-
+ 
       <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Mayrberger, K. & Zawacki-Richter, O. (2018): Qualität von OER: Internationale Bestandsaufnahme von Instrumenten zur Qualitätssicherung von Open Educational Resources (OER) — Schritte zu einem deutschen Modell am Beispiel der Hamburg Open Online University. Online verfügbar unter <a href="https://www.researchgate.net" target="_blank" rel="noopener">researchgate.net</a></p>
-
+ 
       <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Medienzentrum Hofgeismar / Wolfhagen (o. J.): SAMR-Modell zur Integration von digitalen Technologien im Unterricht. Online verfügbar unter <a href="https://mz-hofgeismar.de/apps/" target="_blank" rel="noopener">mz-hofgeismar.de/apps</a></p>
-
+ 
       <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Ministerium für Schule und Bildung des Landes Nordrhein-Westfalen (MSB) (Hrsg.) (2019): <em>Leitlinie Bildung für nachhaltige Entwicklung.</em> Düsseldorf.</p>
-
+ 
       <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Weßels, Doris (2025): Das wissenschaftliche Schreiben als Bildungsziel an Hochschulen: Ein Opfer von ChatGPT und Co.? In: Krauss, Christian; Kurdelski, Lutz-Peter; Kütz, Klaas Ole (Hrsg.): <em>AKWI 2025.</em> Thesis Paper, Kiel, Germany, 09.–11.09.2025. Bonn: Gesellschaft für Informatik e.V., S. 185–192. pISSN: 2944-7682. DOI: <a href="https://doi.org/10.18420/AKWI2025_20" target="_blank" rel="noopener">10.18420/AKWI2025_20</a>. Online verfügbar unter <a href="https://dl.gi.de/handle/20.500.12116/47071" target="_blank" rel="noopener">dl.gi.de</a></p>
-
+ 
       <p style="margin:0 0 12px 0;padding-left:1.4em;text-indent:-1.4em;">Spohn, Lucca (2026): Eine KI-Antwort ist kein Text. Online verfügbar unter <a href="https://luccaspohn.substack.com/p/eine-ki-antwort-ist-kein-text" target="_blank" rel="noopener">luccaspohn.substack.com</a></p>
     </div>
   </div>
-
+ 
   <!-- ============ Anhang: Bewertungslogik ============ -->
   <div class="page-break anhang-section" id="anhang-logik">
     <h2>Anhang: Wie wird die Empfehlung berechnet?</h2>
     <p>Die abschließende Einordnung („Empfohlen" / „Mit Anpassungen empfohlen" / „Nicht empfohlen") wird automatisch aus den angekreuzten Kriterien berechnet. Grundlage sind zwei Werte:</p>
-
+ 
     <h3>1. Gesamterfüllungsgrad</h3>
     <p>Über alle <strong>einbezogenen</strong> Unterkategorien (nicht ausgeschlossene Bereiche) hinweg wird gezählt, wie viele Kriterien angekreuzt sind, im Verhältnis zu allen möglichen Kriterien:</p>
     <p><code>Gesamtwert = angekreuzte Kriterien ÷ mögliche Kriterien</code> (in den einbezogenen Bereichen)</p>
     <p>Das ist derselbe Wert, der oben als „X / Y Kriterien" angezeigt wird.</p>
-
+ 
     <h3>2. Sonderprüfung der Bereiche A1 und B3</h3>
     <p>Unabhängig vom Gesamtwert wird zusätzlich geprüft, wie die Bereiche <strong>A1 (fachliche Richtigkeit)</strong> und <strong>B3 (rechtliche Qualität)</strong> jeweils für sich abschneiden — beide gelten als besonders kritisch für die Einsatzfähigkeit des Materials. Liegt einer der beiden Werte unter 60 %, wird dies als „schwach" markiert. Ist ein Bereich bewusst ausgeschlossen, fließt er nicht in diese Prüfung ein.</p>
-
+ 
     <h3>3. Entscheidungstabelle</h3>
     <table>
       <thead><tr><th>Bedingung</th><th>Ergebnis</th></tr></thead>
@@ -364,9 +419,9 @@
     <p>Kurz gesagt: Der <strong>Gesamtprozentsatz bestimmt die Grundstufe</strong> (80 %-/50 %-Schwelle), während <strong>A1 und B3 als „Veto"</strong> wirken — selbst bei hoher Gesamterfüllung verhindern schwache Werte dort die Bestnote „Empfohlen".</p>
     <p style="color:var(--muted);font-size:.88em;">Sind noch keine Kriterien angekreuzt, erscheint „— noch keine Angaben —". Die Schwellenwerte (80 % / 50 % / 60 %) sind eine Orientierungshilfe und können bei Bedarf angepasst werden.</p>
   </div>
-
+ 
 </div>
-
+ 
 <!-- ============ Modal: Erklärung der Bewertungslogik ============ -->
 <div class="modal-overlay no-print" id="explainModal">
   <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="explainModalTitle">
@@ -386,15 +441,15 @@
     <p style="font-size:.88em;color:var(--muted);">A1 und B3 wirken also als „Veto": Auch bei hoher Gesamterfüllung verhindern schwache Werte dort die Bestnote. Ausführliche Erklärung siehe <a href="#anhang-logik" id="modalAnhangLink">Anhang: Bewertungslogik</a> im Dokument.</p>
   </div>
 </div>
-
+ 
 <script>
   // Unterkategorien: welcher Hauptkategorie (A-D) sie zugeordnet sind + Gesamtzahl Kriterien
   const subcats = {
-    'A1':   { group: 'A', total: 5 },
-    'A2':   { group: 'A', total: 5 },
+    'A1':   { group: 'A', total: 6 },
+    'A2':   { group: 'A', total: 8 },
     'A2_1': { group: 'A', total: 5 },
     'A2_2': { group: 'A', total: 6 },
-    'B1':   { group: 'B', total: 3 },
+    'B1':   { group: 'B', total: 7 },
     'B2':   { group: 'B', total: 3 },
     'B3':   { group: 'B', total: 5 },
     'C1':   { group: 'C', total: 4 },
@@ -405,15 +460,25 @@
   };
   const groupLabels = { A: 'A — Pädagogisch-didaktisch', B: 'B — Technisch', C: 'C — KI-Integration', D: 'D — BNE-fachlich' };
   const groupOrder = ['A', 'B', 'C', 'D'];
-
+  const LZ_LABEL = '🎯 Lernziel-Anker';
+ 
+  function getLernzielPct() {
+    const ids = ['lz-lernziel', 'lz-rolle', 'lz-gelingt', 'lz-ohne'];
+    const filled = ids.filter(id => {
+      const el = document.getElementById(id);
+      return el && el.value.trim().length > 0;
+    }).length;
+    return Math.round((filled / ids.length) * 100);
+  }
+ 
   const ctx = document.getElementById('spiderChart').getContext('2d');
   const spiderChart = new Chart(ctx, {
     type: 'radar',
     data: {
-      labels: groupOrder.map(g => groupLabels[g]),
+      labels: [...groupOrder.map(g => groupLabels[g]), LZ_LABEL],
       datasets: [{
         label: 'Erfüllungsgrad (%)',
-        data: [0, 0, 0, 0],
+        data: [0, 0, 0, 0, 0],
         backgroundColor: 'rgba(52, 152, 219, 0.2)',
         borderColor: 'rgba(52, 152, 219, 1)',
         pointBackgroundColor: 'rgba(41, 128, 185, 1)',
@@ -426,44 +491,54 @@
           angleLines: { display: true },
           suggestedMin: 0,
           suggestedMax: 100,
-          ticks: { stepSize: 20, callback: value => value + '%' }
+          ticks: { stepSize: 20, callback: value => value + '%' },
+          pointLabels: {
+            color: (c) => (c.chart.data.labels[c.index] === LZ_LABEL ? '#1e8449' : '#444'),
+            font: (c) => ({ weight: c.chart.data.labels[c.index] === LZ_LABEL ? 'bold' : 'normal' })
+          }
         }
       },
       plugins: { legend: { position: 'top' } }
     }
   });
-
+ 
   function isActive(key) {
     const toggle = document.querySelector(`[data-section-toggle="${key}"]`);
     return toggle ? toggle.checked : true;
   }
-
+ 
   function updateChart() {
     // Aggregation je Hauptkategorie A-D, nur über aktive Unterkategorien
     const groupChecked = { A: 0, B: 0, C: 0, D: 0 };
     const groupTotal   = { A: 0, B: 0, C: 0, D: 0 };
     let anyActive = false;
-
+ 
     Object.keys(subcats).forEach(key => {
       if (!isActive(key)) return;
       anyActive = true;
       const { group, total } = subcats[key];
-      const checkedCount = document.querySelectorAll(`input[data-cat="${key}"]:checked`).length;
+      let checkedCount;
+      if (key === 'C2') {
+        const selected = document.querySelector('input[name="c2level"]:checked');
+        checkedCount = selected ? parseInt(selected.dataset.level, 10) : 0;
+      } else {
+        checkedCount = document.querySelectorAll(`input[data-cat="${key}"]:checked`).length;
+      }
       groupChecked[group] += checkedCount;
       groupTotal[group]   += total;
     });
-
+ 
     const chartEl = document.getElementById('chart-container');
     const emptyMsg = document.getElementById('chart-empty');
     const canvas = document.getElementById('spiderChart');
-
+ 
     if (!anyActive) {
       canvas.style.display = 'none';
       emptyMsg.style.display = 'block';
     } else {
       canvas.style.display = 'block';
       emptyMsg.style.display = 'none';
-
+ 
       const labels = [];
       const data = [];
       groupOrder.forEach(g => {
@@ -472,36 +547,38 @@
           data.push(Math.round((groupChecked[g] / groupTotal[g]) * 100));
         }
       });
+      labels.push(LZ_LABEL);
+      data.push(getLernzielPct());
       spiderChart.data.labels = labels;
       spiderChart.data.datasets[0].data = data;
       spiderChart.update();
     }
-
+ 
     // Gesamtzähler
     const totalChecked = Object.values(groupChecked).reduce((a, b) => a + b, 0);
     const totalAll = Object.values(groupTotal).reduce((a, b) => a + b, 0);
     document.getElementById('checkedCount').textContent = totalChecked;
     document.getElementById('totalCount').textContent = totalAll;
-
+ 
     updateRecommendation(totalChecked, totalAll, groupChecked, groupTotal);
   }
-
+ 
   function pct(checked, total) {
     return total > 0 ? checked / total : null;
   }
-
+ 
   function updateRecommendation(totalChecked, totalAll, groupChecked, groupTotal) {
     const box = document.getElementById('recommendationBox');
     const sub = document.getElementById('recommendationSub');
     box.classList.remove('rec-empfohlen', 'rec-anpassung', 'rec-nicht');
-
+ 
     if (totalAll === 0 || totalChecked === 0) {
       box.textContent = '— noch keine Angaben —';
       sub.textContent = '';
       box.appendChild(sub);
       return;
     }
-
+ 
     const overall = pct(totalChecked, totalAll);
     const a1 = pct(groupChecked.A, groupTotal.A); // grobe Näherung, da A1 Teil von Gruppe A ist
     const a1Direct = (() => {
@@ -512,9 +589,9 @@
       if (!isActive('B3')) return null;
       return document.querySelectorAll('input[data-cat="B3"]:checked').length / subcats.B3.total;
     })();
-
+ 
     const a1b3Weak = (a1Direct !== null && a1Direct < 0.6) || (b3Direct !== null && b3Direct < 0.6);
-
+ 
     let label, cls, hint = '';
     if (overall >= 0.8 && !a1b3Weak) {
       label = 'Empfohlen';
@@ -531,23 +608,41 @@
       cls = 'rec-nicht';
       if (a1b3Weak) hint = 'Insbesondere A1 (fachliche Richtigkeit) und/oder B3 (rechtliche Qualität) sind unzureichend erfüllt.';
     }
-
+ 
     box.textContent = label;
     box.classList.add(cls);
     sub.textContent = hint;
     box.appendChild(sub);
   }
-
+ 
   function updateSectionVisual(toggle) {
     const key = toggle.getAttribute('data-section-toggle');
     const section = document.querySelector(`.subsection[data-section="${key}"]`);
     if (section) section.classList.toggle('excluded', !toggle.checked);
   }
-
+ 
+  function updateC2Levels() {
+    const selected = document.querySelector('input[name="c2level"]:checked');
+    const selLevel = selected ? parseInt(selected.dataset.level, 10) : 0;
+    document.querySelectorAll('.level-item').forEach(item => {
+      const lvl = parseInt(item.dataset.level, 10);
+      item.classList.toggle('level-included', selLevel > 0 && lvl <= selLevel);
+    });
+  }
+ 
+  document.querySelectorAll('input[name="c2level"]').forEach(radio => {
+    radio.addEventListener('change', () => { updateC2Levels(); updateChart(); });
+  });
+ 
+  ['lz-lernziel', 'lz-rolle', 'lz-gelingt', 'lz-ohne'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', updateChart);
+  });
+ 
   document.querySelectorAll('#evalForm input[type="checkbox"][data-cat]').forEach(cb => {
     cb.addEventListener('change', updateChart);
   });
-
+ 
   document.querySelectorAll('.section-toggle').forEach(toggle => {
     toggle.addEventListener('change', () => {
       // Bei radio-Gruppe (C3-Varianten) auch die abgewählte Section optisch aktualisieren
@@ -559,26 +654,42 @@
       updateChart();
     });
   });
-
+ 
   document.getElementById('resetBtn').addEventListener('click', () => {
     document.querySelectorAll('#evalForm input[type="checkbox"][data-cat]').forEach(cb => cb.checked = false);
+    document.querySelectorAll('input[name="c2level"]').forEach(r => r.checked = false);
+    ['lz-lernziel', 'lz-rolle', 'lz-gelingt', 'lz-ohne'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    updateC2Levels();
     updateChart();
   });
-
+ 
   document.getElementById('printBtn').addEventListener('click', () => window.print());
-
+ 
   // ===== Modal: Erklärung der Bewertungslogik =====
   const explainModal = document.getElementById('explainModal');
   function openModal() { explainModal.classList.add('open'); }
   function closeModal() { explainModal.classList.remove('open'); }
-
+ 
   document.getElementById('explainBtn').addEventListener('click', openModal);
   document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
   explainModal.addEventListener('click', (e) => { if (e.target === explainModal) closeModal(); });
   document.getElementById('modalAnhangLink').addEventListener('click', closeModal);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
-
+ 
+  updateC2Levels();
   updateChart();
 </script>
 </body>
 </html>
+ 
+
+
+
+
+
+
+
+
