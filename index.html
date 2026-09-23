@@ -185,7 +185,10 @@
     </div>
 
     <!-- ============ A3. Aufgabenstellung im KI-Zeitalter ============ -->
-    <h3>A3. Aufgabenstellung im KI-Zeitalter</h3>
+    <div class="subsection-header">
+      <h3 style="margin:0;">A3. Aufgabenstellung im KI-Zeitalter</h3>
+      <label class="toggle-label"><input type="checkbox" id="includeA3" class="section-toggle-master" checked> Bereich einbeziehen</label>
+    </div>
 
     <p class="subsection-intro" style="margin:0 4px;">Bereich A3 „Aufgabenstellung im KI-Zeitalter" liegt in zwei Varianten vor — bitte <strong>entweder</strong> die KI-Aufgabenkultur nach Falck/Flick <strong>oder</strong> das Polmodell nach Barbara Geyer für die Bewertung einbeziehen.</p>
 
@@ -513,7 +516,12 @@
 
   function isActive(key) {
     const toggle = document.querySelector(`[data-section-toggle="${key}"]`);
-    return toggle ? toggle.checked : true;
+    const own = toggle ? toggle.checked : true;
+    if (key === 'A3_1' || key === 'A3_2') {
+      const master = document.getElementById('includeA3');
+      return own && (master ? master.checked : true);
+    }
+    return own;
   }
 
   function updateChart() {
@@ -630,6 +638,16 @@
     if (section) section.classList.toggle('excluded', !toggle.checked);
   }
 
+  function updateA3MasterVisual() {
+    const master = document.getElementById('includeA3');
+    const on = master ? master.checked : true;
+    ['A3_1', 'A3_2'].forEach(key => {
+      const section = document.querySelector(`.subsection[data-section="${key}"]`);
+      const radio = document.querySelector(`[data-section-toggle="${key}"]`);
+      if (section) section.classList.toggle('excluded', !on || !(radio && radio.checked));
+    });
+  }
+
   function updateC2Levels() {
     const selected = document.querySelector('input[name="c2level"]:checked');
     const selLevel = selected ? parseInt(selected.dataset.level, 10) : 0;
@@ -654,15 +672,21 @@
 
   document.querySelectorAll('.section-toggle').forEach(toggle => {
     toggle.addEventListener('change', () => {
-      // Bei radio-Gruppe (C3-Varianten) auch die abgewählte Section optisch aktualisieren
+      // Bei radio-Gruppe (A3-/C3-Varianten) auch die abgewählte Section optisch aktualisieren
       if (toggle.type === 'radio') {
         document.querySelectorAll(`input[name="${toggle.name}"]`).forEach(updateSectionVisual);
+        updateA3MasterVisual();
       } else {
         updateSectionVisual(toggle);
       }
       updateChart();
     });
   });
+
+  const includeA3Toggle = document.getElementById('includeA3');
+  if (includeA3Toggle) {
+    includeA3Toggle.addEventListener('change', () => { updateA3MasterVisual(); updateChart(); });
+  }
 
   document.getElementById('resetBtn').addEventListener('click', () => {
     document.querySelectorAll('#evalForm input[type="checkbox"][data-cat]').forEach(cb => cb.checked = false);
@@ -689,6 +713,7 @@
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
 
   updateC2Levels();
+  updateA3MasterVisual();
   updateChart();
 </script>
 </body>
